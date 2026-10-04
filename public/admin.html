@@ -36,31 +36,30 @@ code{font-family:var(--mono);word-break:break-all}
 /* Topbar */
 .topbar{height:64px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--amber),#d97706);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;box-shadow:0 4px 12px rgba(245,158,11,.35)}
-.brand-title{font-size:16px;font-weight:800;color:var(--head);letter-spacing:-.02em}
-.top-actions{display:flex;align-items:center;gap:12px}
-.btn-nav{background:var(--panel);border:1px solid var(--line2);color:var(--dim);padding:8px 14px;border-radius:8px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
+.brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--amber),#d97706);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px}
+.brand-title{font-size:15px;font-weight:800;color:var(--head);letter-spacing:-.02em}
+.top-actions{display:flex;align-items:center;gap:10px}
+.btn-nav{background:var(--panel);border:1px solid var(--line2);color:var(--dim);padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
 .btn-nav:hover{border-color:var(--sky);color:var(--head)}
 
 /* Layout */
 .container{max-width:1120px;margin:0 auto;padding:36px 24px}
 
 /* Auth Card */
-.auth-wrap{max-width:440px;margin:60px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:36px;box-shadow:0 20px 40px rgba(0,0,0,.25);text-align:center}
-.auth-icon{width:64px;height:64px;border-radius:16px;background:var(--amber-dim);border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px}
-.auth-title{font-size:20px;font-weight:800;color:var(--head);margin-bottom:8px}
-.auth-desc{font-size:13px;color:var(--muted);margin-bottom:24px}
+.auth-wrap{max-width:440px;margin:60px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 20px 40px rgba(0,0,0,.25);text-align:center}
+.auth-title{font-size:18px;font-weight:800;color:var(--head);margin-bottom:6px}
+.auth-desc{font-size:13px;color:var(--muted);margin-bottom:20px}
 
 /* Form inputs */
-.field-wrap{margin-bottom:18px;text-align:left}
-.field-label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.field-input{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;color:var(--head);font-size:13px;outline:none;transition:border-color .2s}
+.field-wrap{margin-bottom:16px;text-align:left}
+.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.field-input{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;color:var(--head);font-size:13px;outline:none;transition:border-color .2s;box-sizing:border-box}
 .field-input:focus{border-color:var(--amber)}
 
 /* Buttons */
-.btn{width:100%;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn{width:100%;padding:11px 16px;border-radius:8px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
 .btn-amber{background:linear-gradient(135deg,var(--amber),#d97706);color:#fff}
-.btn-amber:hover{filter:brightness(1.1);box-shadow:0 4px 16px rgba(245,158,11,.4)}
+.btn-amber:hover{filter:brightness(1.1)}
 .btn-green{background:var(--green);color:#fff}
 .btn-green:hover{filter:brightness(1.1)}
 .btn-ghost{background:var(--panel);border:1px solid var(--line2);color:var(--dim)}
@@ -68,41 +67,44 @@ code{font-family:var(--mono);word-break:break-all}
 .btn-red{background:var(--red);color:#fff}
 .btn-red:hover{filter:brightness(1.1)}
 
+/* Minimalist Icon Copy Button */
+.btn-copy-icon{background:transparent;color:var(--muted);border:1px solid var(--line2);border-radius:6px;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;vertical-align:middle;margin-left:4px}
+.btn-copy-icon:hover{background:var(--panel);color:var(--head);border-color:var(--sky)}
+.btn-copy-icon svg{width:13px;height:13px;stroke:currentColor}
+
 /* Dashboard Grid */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
-.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
-.stat-label{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.stat-val{font-size:26px;font-weight:800;color:var(--head);margin-top:6px;font-family:var(--mono)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stat-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat-val{font-size:24px;font-weight:800;color:var(--head);margin-top:6px;font-family:var(--mono)}
 
 /* Panels */
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:28px}
-.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.panel-title{font-size:16px;font-weight:800;color:var(--head);display:flex;align-items:center;gap:8px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:24px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.panel-title{font-size:15px;font-weight:800;color:var(--head)}
 
 /* Table */
 .tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:12px 14px;background:var(--panel);color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)}
-td{padding:14px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;padding:11px 12px;background:var(--panel);color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)}
+td{padding:12px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:middle}
 tr:hover td{background:var(--panel)}
 
 /* Badges */
-.badge{padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;text-transform:uppercase;display:inline-block}
+.badge{padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;text-transform:uppercase;display:inline-block}
 .badge-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.3)}
 .badge-suspended{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
 .badge-expired{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3)}
 
-.key-code{background:var(--panel);border:1px solid var(--line);padding:4px 8px;border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--sky)}
-.btn-copy{padding:3px 8px;border-radius:5px;font-size:11px;background:var(--line2);color:var(--dim);margin-left:6px;cursor:pointer}
-.btn-copy:hover{color:var(--head);background:var(--blue)}
+.key-code{background:var(--panel);border:1px solid var(--line);padding:4px 8px;border-radius:6px;font-family:var(--mono);font-size:11.5px;color:var(--sky)}
 
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;max-width:540px;width:90%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;max-width:540px;width:90%;padding:24px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
 
 /* Toast Notification */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--green);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:8px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--sky);color:#fff;padding:8px 18px;border-radius:99px;font-size:12.5px;font-weight:600;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:6px}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 @media(max-width:768px){
@@ -124,16 +126,16 @@ tr:hover td{background:var(--panel)}
 
 <header class="topbar">
   <div class="brand">
-    <div class="brand-icon">⚡</div>
+    <div class="brand-icon">Q</div>
     <div>
-      <div class="brand-title">SaaS Admin Portal</div>
-      <div style="font-size:11px;color:var(--muted)">QRIS Multi-Client Gateway</div>
+      <div class="brand-title">Admin Dashboard</div>
+      <div style="font-size:11px;color:var(--muted)">Manajemen API Key & Klien</div>
     </div>
   </div>
   <div class="top-actions">
-    <a href="/" class="btn-nav">🌐 Halaman Utama API</a>
-    <button class="btn-nav" id="themeBtn" onclick="toggleTheme()">☀️ Mode Terang</button>
-    <button class="btn-nav" id="logoutBtn" style="display:none;color:var(--red);border-color:rgba(239,68,68,.3)" onclick="doLogout()">🚪 Logout</button>
+    <a href="/" class="btn-nav">Dokumentasi API</a>
+    <button class="btn-nav" id="themeBtn" onclick="toggleTheme()">Tema</button>
+    <button class="btn-nav" id="logoutBtn" style="display:none;color:var(--red);border-color:rgba(239,68,68,.3)" onclick="doLogout()">Logout</button>
   </div>
 </header>
 
@@ -141,15 +143,14 @@ tr:hover td{background:var(--panel)}
 
   <!-- 1. LOGIN SCREEN -->
   <div id="authScreen" class="auth-wrap">
-    <div class="auth-icon">🔐</div>
-    <h1 class="auth-title">Akses Khusus Pemilik</h1>
-    <p class="auth-desc">Masukkan Password Admin Secret untuk mengelola langganan klien & API Key.</p>
+    <h1 class="auth-title">Akses Pemilik</h1>
+    <p class="auth-desc">Masukkan Password Admin untuk mengelola langganan API Key.</p>
 
     <div class="field-wrap">
-      <label class="field-label">Password Admin (ADMIN_SECRET)</label>
-      <input type="password" id="adminSecretInput" class="field-input" placeholder="Masukkan password admin..." onkeydown="if(event.key==='Enter')doLogin()"/>
+      <label class="field-label">Password Admin</label>
+      <input type="password" id="adminSecretInput" class="field-input" placeholder="Masukkan password admin" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="btn btn-amber" onclick="doLogin()">Masuk ke Dashboard</button>
+    <button class="btn btn-amber" onclick="doLogin()">Masuk</button>
     <div id="authError" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
   </div>
 
@@ -167,21 +168,19 @@ tr:hover td{background:var(--panel)}
         <div class="stat-val" id="statActiveClients" style="color:var(--green)">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Total Transaksi Gateway</div>
+        <div class="stat-label">Total Transaksi</div>
         <div class="stat-val" id="statTotalTrx" style="color:var(--sky)">0</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Status Server</div>
-        <div class="stat-val" style="color:var(--green);font-size:20px;display:flex;align-items:center;gap:8px">
-          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green)"></span> ONLINE
-        </div>
+        <div class="stat-val" style="color:var(--green);font-size:18px">ONLINE</div>
       </div>
     </div>
 
     <!-- PANEL BUAT KLIEN BARU -->
     <div class="panel">
       <div class="panel-head">
-        <div class="panel-title">➕ Terbitkan API Key Baru untuk Klien Pembeli</div>
+        <div class="panel-title">Terbitkan API Key Baru</div>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px">
@@ -190,31 +189,30 @@ tr:hover td{background:var(--panel)}
           <input type="text" id="newClientName" class="field-input" placeholder="Contoh: Toko VPN Rian / Bot Topup Reza"/>
         </div>
         <div class="field-wrap" style="margin-bottom:0">
-          <label class="field-label">Durasi Paket Langganan</label>
+          <label class="field-label">Durasi Langganan</label>
           <select id="newClientDays" class="field-input">
-            <option value="7">7 Hari (Paket Trial / Percobaan)</option>
-            <option value="30" selected>30 Hari (1 Bulan Standar)</option>
-            <option value="60">60 Hari (2 Bulan)</option>
-            <option value="90">90 Hari (3 Bulan)</option>
-            <option value="365">365 Hari (1 Tahun Penuh)</option>
+            <option value="7">7 Hari</option>
+            <option value="30" selected>30 Hari</option>
+            <option value="60">60 Hari</option>
+            <option value="90">90 Hari</option>
+            <option value="365">365 Hari</option>
           </select>
         </div>
       </div>
 
       <div class="field-wrap">
-        <label class="field-label">Custom QRIS Statis (Opsional)</label>
-        <input type="text" id="newClientQr" class="field-input" placeholder="Kosongkan jika ingin memakai QRIS GoPay utama server Anda"/>
-        <small style="color:var(--muted);font-size:11px">Jika klien ingin uang pembayaran langsung masuk ke rekening GoPay miliknya sendiri, tempel QRIS statis string dia di sini.</small>
+        <label class="field-label">Custom QRIS Statis</label>
+        <input type="text" id="newClientQr" class="field-input" placeholder="Kosongkan jika klien akan mengisi sendiri saat request"/>
       </div>
 
-      <button class="btn btn-amber" style="width:auto;padding:10px 24px" onclick="createClient()">⚡ Buat Kunci API & Terbitkan</button>
+      <button class="btn btn-amber" style="width:auto;padding:9px 20px" onclick="createClient()">Terbitkan API Key</button>
     </div>
 
     <!-- PANEL DAFTAR KLIEN -->
     <div class="panel">
       <div class="panel-head">
-        <div class="panel-title">👥 Daftar Klien & Manajemen Akses</div>
-        <button class="btn btn-ghost" style="width:auto;padding:6px 14px;font-size:12px" onclick="fetchClients()">🔄 Refresh Data</button>
+        <div class="panel-title">Daftar Klien Berlangganan</div>
+        <button class="btn btn-ghost" style="width:auto;padding:6px 12px;font-size:11.5px" onclick="fetchClients()">Refresh Data</button>
       </div>
 
       <div class="tbl-wrap">
@@ -222,16 +220,16 @@ tr:hover td{background:var(--panel)}
           <thead>
             <tr>
               <th>Nama Klien</th>
-              <th>API Key (Kunci Klien)</th>
+              <th>API Key</th>
               <th>Status</th>
-              <th>Sisa Hari / Masa Berlaku</th>
+              <th>Masa Berlaku</th>
               <th>Total Trx</th>
-              <th style="text-align:right">Aksi Manajemen</th>
+              <th style="text-align:right">Aksi</th>
             </tr>
           </thead>
           <tbody id="clientsTableBody">
             <tr>
-              <td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Memuat data klien...</td>
+              <td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Memuat data...</td>
             </tr>
           </tbody>
         </table>
@@ -245,16 +243,15 @@ tr:hover td{background:var(--panel)}
 <!-- MODAL POPUP SETELAH BUAT KLIEN BARU -->
 <div class="modal-overlay" id="successModal">
   <div class="modal-box">
-    <div style="font-size:32px;margin-bottom:12px">🎉</div>
-    <h3 style="font-size:18px;font-weight:800;color:var(--head);margin-bottom:8px">API Key Berhasil Diterbitkan!</h3>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Salin detail di bawah ini dan kirimkan langsung ke klien/pembeli Anda:</p>
+    <h3 style="font-size:16px;font-weight:800;color:var(--head);margin-bottom:6px">API Key Berhasil Diterbitkan</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Salin teks berikut untuk dikirimkan ke klien:</p>
 
-    <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px">
-      <textarea id="clientWelcomeText" readonly style="width:100%;height:140px;background:transparent;border:none;color:var(--head);font-size:12px;resize:none;outline:none"></textarea>
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:14px">
+      <textarea id="clientWelcomeText" readonly style="width:100%;height:130px;background:transparent;border:none;color:var(--head);font-size:11.5px;resize:none;outline:none"></textarea>
     </div>
 
     <div style="display:flex;gap:10px">
-      <button class="btn btn-green" onclick="copyWelcomeText()">📋 Salin Pesan untuk Klien</button>
+      <button class="btn btn-green" onclick="copyWelcomeText()">Salin Pesan</button>
       <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
     </div>
   </div>
@@ -267,7 +264,6 @@ function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
   const nxt = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', nxt);
-  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '☀️ Mode Terang' : '🌙 Mode Gelap';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -278,7 +274,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 async function doLogin() {
   const secret = document.getElementById('adminSecretInput').value.trim();
-  if(!secret) return alert('Silakan masukkan password admin!');
+  if(!secret) return alert('Masukkan password admin!');
   currentSecret = secret;
   await validateAndLoad();
 }
@@ -308,12 +304,12 @@ async function validateAndLoad() {
       document.getElementById('logoutBtn').style.display = 'inline-flex';
       renderDashboard(json.data);
     } else {
-      errBox.innerText = json.message || 'Password Admin tidak valid!';
+      errBox.innerText = json.message || 'Password Admin salah';
       errBox.style.display = 'block';
       localStorage.removeItem('ghx_admin_secret');
     }
   } catch(e) {
-    errBox.innerText = 'Gagal terhubung ke server: ' + e.message;
+    errBox.innerText = 'Koneksi gagal: ' + e.message;
     errBox.style.display = 'block';
   }
 }
@@ -331,7 +327,6 @@ async function fetchClients() {
 }
 
 function renderDashboard(clients) {
-  // Update stats
   let totalTrx = 0;
   let activeCount = 0;
   const now = Date.now();
@@ -346,12 +341,11 @@ function renderDashboard(clients) {
   document.getElementById('statActiveClients').innerText = activeCount;
   document.getElementById('statTotalTrx').innerText = totalTrx;
 
-  // Render Table
   const tbody = document.getElementById('clientsTableBody');
   tbody.innerHTML = '';
 
   if (clients.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Belum ada klien terdaftar. Silakan terbitkan di panel atas.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Belum ada klien terdaftar.</td></tr>';
     return;
   }
 
@@ -372,7 +366,7 @@ function renderDashboard(clients) {
     const remainingDays = Math.ceil((expTime - now) / (1000 * 60 * 60 * 24));
     let timeLabel = '';
     if (isExpired) {
-      timeLabel = `<span style="color:var(--red);font-weight:700">Habis (${Math.abs(remainingDays)} hari lalu)</span>`;
+      timeLabel = `<span style="color:var(--red);font-weight:700">Habis</span>`;
     } else {
       timeLabel = `<span style="color:var(--green);font-weight:700">${remainingDays} hari tersisa</span><br><small style="color:var(--muted)">s/d ${new Date(c.expiresAt).toLocaleDateString('id-ID')}</small>`;
     }
@@ -380,23 +374,25 @@ function renderDashboard(clients) {
     tbody.innerHTML += `
       <tr>
         <td>
-          <b style="color:var(--head);font-size:14px">${c.clientName}</b>
+          <b style="color:var(--head);font-size:13px">${c.clientName}</b>
           ${c.customStaticQr ? '<br><small style="color:var(--sky)">Custom QRIS</small>' : ''}
         </td>
         <td>
           <span class="key-code">${c.apiKey}</span>
-          <button class="btn-copy" onclick="navigator.clipboard.writeText('${c.apiKey}');showToast('API Key disalin!')">Salin</button>
+          <button type="button" class="btn-copy-icon" onclick="copyText('${c.apiKey}')" title="Salin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
         </td>
         <td><span class="badge ${badgeClass}">${badgeText}</span></td>
         <td>${timeLabel}</td>
         <td><b>${c.totalTransactions || 0}</b></td>
         <td style="text-align:right">
-          <div style="display:inline-flex;gap:6px">
-            <button class="btn btn-green" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="extendClient('${c.apiKey}')">+30 Hari</button>
-            <button class="btn btn-ghost" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="toggleClient('${c.apiKey}', '${c.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE'}')">
+          <div style="display:inline-flex;gap:5px">
+            <button class="btn btn-green" style="padding:4px 9px;font-size:11px;width:auto" onclick="extendClient('${c.apiKey}')">+30 Hari</button>
+            <button class="btn btn-ghost" style="padding:4px 9px;font-size:11px;width:auto" onclick="toggleClient('${c.apiKey}', '${c.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE'}')">
               ${c.status === 'ACTIVE' ? 'Suspend' : 'Aktifkan'}
             </button>
-            <button class="btn btn-red" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="deleteClient('${c.apiKey}')">Hapus</button>
+            <button class="btn btn-red" style="padding:4px 9px;font-size:11px;width:auto" onclick="deleteClient('${c.apiKey}')">Hapus</button>
           </div>
         </td>
       </tr>
@@ -409,7 +405,7 @@ async function createClient() {
   const days = document.getElementById('newClientDays').value;
   const qr = document.getElementById('newClientQr').value.trim();
 
-  if(!name) return alert('Silakan masukkan Nama Klien / Pembeli!');
+  if(!name) return alert('Masukkan Nama Klien!');
 
   try {
     const res = await fetch('/api/admin/keys/create', {
@@ -430,8 +426,7 @@ async function createClient() {
       document.getElementById('newClientQr').value = '';
       fetchClients();
 
-      // Show welcome text for client
-      const template = `Halo kak ${name},\nBerikut akses API Payment Gateway QRIS Anda:\n\n• API Key: ${json.data.apiKey}\n• Masa Aktif: ${days} Hari\n• Dokumentasi API: https://qris.ghxlih.biz.id\n• Endpoint Create: https://qris.ghxlih.biz.id/api/create?amount=15000\n• Header: x-api-key: ${json.data.apiKey}\n\nTerima kasih sudah berlangganan! Hubungi @GallVpnStore jika ada kendala.`;
+      const template = `Halo kak ${name},\nBerikut akses API Payment Gateway QRIS Anda:\n\nAPI Key: ${json.data.apiKey}\nMasa Aktif: ${days} Hari\nDokumentasi API: https://qris.ghxlih.biz.id\nEndpoint Create: https://qris.ghxlih.biz.id/api/create?amount=15000\nHeader: x-api-key: ${json.data.apiKey}\n\nSupport: @GallVpnStore`;
       
       document.getElementById('clientWelcomeText').value = template;
       document.getElementById('successModal').classList.add('open');
@@ -439,12 +434,12 @@ async function createClient() {
       alert(json.message);
     }
   } catch(e) {
-    alert('Gagal membuat klien: ' + e.message);
+    alert('Gagal: ' + e.message);
   }
 }
 
 async function extendClient(key) {
-  if(!confirm('Perpanjang masa aktif klien ini sebesar 30 hari lagi?')) return;
+  if(!confirm('Perpanjang masa aktif 30 hari lagi?')) return;
   try {
     const res = await fetch('/api/admin/keys/extend', {
       method: 'POST',
@@ -469,7 +464,7 @@ async function toggleClient(key, status) {
 }
 
 async function deleteClient(key) {
-  if(!confirm('Yakin ingin MENGHAPUS klien ini secara permanen?')) return;
+  if(!confirm('Hapus API Key ini?')) return;
   try {
     const res = await fetch('/api/admin/keys/delete', {
       method: 'POST',
@@ -484,18 +479,24 @@ async function deleteClient(key) {
 function showToast(text) {
   const t = document.getElementById('toastAdmin');
   if(!t) return;
-  t.innerText = '📋 ' + text;
+  t.innerText = text;
   t.classList.add('show');
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(() => {
     t.classList.remove('show');
-  }, 2200);
+  }, 2000);
+}
+
+function copyText(val) {
+  if(!val) return;
+  navigator.clipboard.writeText(val);
+  showToast('Disalin ke clipboard');
 }
 
 function copyWelcomeText() {
   const txt = document.getElementById('clientWelcomeText').value;
   navigator.clipboard.writeText(txt);
-  showToast('Teks berhasil disalin! Tinggal kirim ke klien.');
+  showToast('Teks pesan disalin');
 }
 
 function closeModal() {
@@ -503,7 +504,6 @@ function closeModal() {
 }
 </script>
 
-<!-- FLOATING TOAST -->
-<div id="toastAdmin" class="toast">📋 Berhasil disalin!</div>
+<div id="toastAdmin" class="toast">Disalin ke clipboard</div>
 </body>
 </html>

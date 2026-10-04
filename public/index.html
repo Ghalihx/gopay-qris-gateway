@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>QRIS Payment Gateway — Official API & Documentation</title>
+<title>QRIS Payment Gateway — API & Dokumentasi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
 :root{
   --ink:#020d1a;--surface:#041528;--panel:#071e36;--raised:#0a2644;
@@ -47,7 +48,7 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 .s-logo-inner{display:flex;align-items:center;gap:10px}
 .s-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#1a73e8,#0d47a1);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px var(--blue-glow);color:#fff;font-weight:900}
 .s-name{font-weight:800;font-size:15px;color:var(--head);letter-spacing:-.02em}
-.s-close{display:none;background:transparent;color:var(--dim);font-size:20px;padding:4px 8px;border-radius:6px}
+.s-close{display:none;background:transparent;color:var(--dim);font-size:18px;padding:4px 8px;border-radius:6px}
 
 .nav{padding:14px 0;flex:1}
 .nav-grp-label{padding:12px 20px 6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -58,7 +59,7 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 /* Main Area */
 .main{margin-left:var(--sidebar-w);flex:1;min-width:0;width:100%;max-width:100%;overflow-x:hidden}
 .topbar{height:var(--topbar-h);position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:10px;backdrop-filter:blur(12px);max-width:100vw;box-sizing:border-box}
-.t-menu-btn{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--head);font-size:18px}
+.t-menu-btn{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--head);font-size:16px}
 .t-bread{flex:1;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .t-online{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--green);font-weight:700;background:var(--green-dim);border:1px solid rgba(16,185,129,.3);padding:5px 12px;border-radius:99px;white-space:nowrap}
 .t-pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
@@ -90,18 +91,21 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 .field-wrap{margin-bottom:16px}
 .field-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
-.btn-copy-tag{background:var(--line2);color:var(--sky);border:1px solid var(--line);padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-copy-tag:hover{background:var(--blue);color:#fff}
 
 .field-input, .field-textarea{width:100%;background:var(--panel);border:1.5px solid var(--line2);color:var(--head);padding:11px 13px;border-radius:9px;outline:none;font-size:13px;transition:all .2s;box-sizing:border-box}
 .field-input:focus, .field-textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--blue-dim)}
 .field-textarea{resize:vertical;min-height:70px}
+.field-file{width:100%;background:var(--panel);border:1.5px dashed var(--line2);color:var(--muted);padding:10px 12px;border-radius:9px;font-size:12px;cursor:pointer}
+
+/* Minimalist Icon Copy Button */
+.btn-copy-icon{background:transparent;color:var(--muted);border:1px solid var(--line2);border-radius:6px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;flex-shrink:0}
+.btn-copy-icon:hover{background:var(--panel);color:var(--head);border-color:var(--sky)}
+.btn-copy-icon svg{width:14px;height:14px;stroke:currentColor}
 
 /* Input with inline copy button */
 .input-copy-group{position:relative;display:flex;align-items:center;width:100%}
-.input-copy-group .field-input{padding-right:76px;text-overflow:ellipsis}
-.btn-inline-copy{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--line2);color:var(--sky);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .2s}
-.btn-inline-copy:hover{background:var(--blue);color:#fff}
+.input-copy-group .field-input{padding-right:44px;text-overflow:ellipsis}
+.input-copy-group .btn-copy-icon{position:absolute;right:6px;top:50%;transform:translateY(-50%)}
 
 .btn{width:100%;padding:12px;border-radius:9px;font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;box-shadow:0 4px 14px var(--blue-glow)}
@@ -117,7 +121,6 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 .snippet-tabs{display:flex;gap:4px}
 .snippet-tab{padding:5px 11px;font-size:11px;font-weight:700;color:var(--dim);border-radius:6px;cursor:pointer;font-family:var(--mono);background:transparent}
 .snippet-tab.active{background:var(--surface);color:var(--sky)}
-.snippet-copy{background:rgba(255,255,255,.1);color:var(--sky);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
 .snippet-body{padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;color:#7bbde8;overflow-x:auto;white-space:pre;max-width:100%}
 
 .qr-box-result{display:none;margin-top:20px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
@@ -131,7 +134,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 .footer{margin-top:50px;padding:28px 20px;background:var(--surface);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
 
 /* Toast Notification */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--green);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:8px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--sky);color:#fff;padding:8px 18px;border-radius:99px;font-size:12.5px;font-weight:600;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:6px}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 /* Responsive Breakpoints */
@@ -165,33 +168,33 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         <div class="s-icon">Q</div>
         <div class="s-name">QRIS Gateway</div>
       </div>
-      <button class="s-close" onclick="closeSidebar()" aria-label="Tutup Menu">✕</button>
+      <button class="s-close" onclick="closeSidebar()" aria-label="Tutup">✕</button>
     </div>
     <nav class="nav">
       <div class="nav-grp-label">Navigasi</div>
       <a href="#overview" class="nav-a active" onclick="closeSidebar()">Overview</a>
-      <a href="#generator" class="nav-a" onclick="closeSidebar()">Generate QRIS Dinamis</a>
+      <a href="#generator" class="nav-a" onclick="closeSidebar()">Generator QRIS</a>
       <a href="#session" class="nav-a" onclick="closeSidebar()">Session GoMerch</a>
-      <a href="#mutasi" class="nav-a" onclick="closeSidebar()">Cek Mutasi Transaksi</a>
+      <a href="#mutasi" class="nav-a" onclick="closeSidebar()">Mutasi Transaksi</a>
       <div class="nav-grp-label">Integrasi Developer</div>
       <a href="#docs" class="nav-a" onclick="closeSidebar()">Dokumentasi REST API</a>
       <a href="#snippets" class="nav-a" onclick="closeSidebar()">Contoh Kode Integrasi</a>
-      <div class="nav-grp-label">Portal Pemilik</div>
-      <a href="/admin" class="nav-a" style="color:var(--amber)">👑 Admin Dashboard &rarr;</a>
+      <div class="nav-grp-label">Akses Pemilik</div>
+      <a href="/admin" class="nav-a" style="color:var(--amber)">Dashboard Admin &rarr;</a>
     </nav>
     <div style="padding:16px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line)">
-      Version: <strong style="color:var(--dim)">v2.0 (SaaS Ready)</strong><br/>
-      Status: <strong style="color:var(--green)">Online (HTTPS)</strong>
+      Version: <strong style="color:var(--dim)">v2.0</strong><br/>
+      Status: <strong style="color:var(--green)">Online</strong>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <div class="main">
     <div class="topbar">
-      <button class="t-menu-btn" onclick="toggleSidebar()" aria-label="Buka Menu">☰</button>
+      <button class="t-menu-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
       <div class="t-bread">gateway / api / v2.0</div>
-      <div class="t-online"><div class="t-pulse"></div><span>API Ready</span></div>
-      <a href="/admin" class="t-theme" style="color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:6px">👑 <span>Portal Admin</span></a>
+      <div class="t-online"><div class="t-pulse"></div><span>Online</span></div>
+      <a href="/admin" class="t-theme" style="color:var(--amber);text-decoration:none">Admin Portal</a>
       <button class="t-theme" onclick="toggleTheme()">Tema</button>
     </div>
 
@@ -201,12 +204,12 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
       <section id="overview" class="section">
         <div class="hero-band">
           <div class="hero-tag">Official Gateway API</div>
-          <h1 class="page-title">SaaS QRIS Dynamic Payment Gateway</h1>
+          <h1 class="page-title">QRIS Dynamic Payment Gateway</h1>
           <p class="page-sub">
-            Solusi integrasi pembayaran otomatis GoPay QRIS 24/7 dengan kode unik dynamic nominal, validasi instan, dan multi-client API Key subscription engine.
+            Integrasi pembayaran otomatis GoPay QRIS 24/7 dengan kode unik dynamic nominal, validasi instan, dan proteksi langganan API Key.
           </p>
           <div class="hero-meta-row">
-            <div class="meta-chip">Standard: <strong>EMVCo ASPI / BI</strong></div>
+            <div class="meta-chip">Standard: <strong>EMVCo BI</strong></div>
             <div class="meta-chip">Proxy: <strong>Universal GoMerch</strong></div>
             <div class="meta-chip">Domain: <strong id="displayBaseUrl">Loading...</strong></div>
           </div>
@@ -214,55 +217,51 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
         <div class="grid-2">
           <div class="info-card">
-            <div class="ic-title">⚡ Dynamic Unique Amount</div>
-            <div class="ic-desc">Setiap transaksi dibuat dengan nominal dasar ditambah 3 digit kode acak unik (100 - 300) untuk mencocokkan mutasi rekening secara akurat tanpa bentrok.</div>
+            <div class="ic-title">Dynamic Unique Amount</div>
+            <div class="ic-desc">Setiap transaksi dibuat dengan nominal dasar ditambah 3 digit kode acak unik (100 - 300) untuk pencocokan mutasi otomatis tanpa bentrok.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">🔒 Multi-Client Subscription</div>
-            <div class="ic-desc">Setiap klien pembeli diberikan API Key eksklusif dengan masa aktif (30/60/90 hari) yang bisa dikelola penuh dari dashboard pemilik.</div>
+            <div class="ic-title">API Key Authentication</div>
+            <div class="ic-desc">Setiap klien wajib menggunakan API Key aktif terdaftar untuk memanggil endpoint pembuatan transaksi pembayaran.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">🏪 Multi-Merchant Support</div>
-            <div class="ic-desc">Klien dapat menggunakan QRIS toko default Anda atau menempelkan QRIS toko GoPay mereka sendiri agar uang langsung masuk ke rekening pembeli.</div>
+            <div class="ic-title">Custom QRIS Input</div>
+            <div class="ic-desc">Mendukung upload gambar QRIS statis atau input string QRIS langsung dari perangkat pengguna.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">🤖 Support Telegram Support</div>
-            <div class="ic-desc">Bantuan teknis dan perpanjangan sewa API Gateway resmi melalui Telegram Support: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky);font-weight:700">@GallVpnStore</a>.</div>
+            <div class="ic-title">Telegram Support</div>
+            <div class="ic-desc">Layanan bantuan dan aktivasi lisensi API Key resmi melalui Telegram: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky);font-weight:700">@GallVpnStore</a>.</div>
           </div>
         </div>
       </section>
 
-      <!-- 2. GENERATOR TESTING PLAYGROUND -->
+      <!-- 2. GENERATOR PLAYGROUND -->
       <section id="generator" class="section">
-        <div class="sec-title">🎯 Coba Langsung: Generate QRIS Dinamis</div>
+        <div class="sec-title">Generator QRIS Dinamis</div>
         <div class="callout cl-green">
-          Masukkan nominal pembayaran di bawah ini untuk melihat hasil QRIS dinamis beserta kode uniknya secara langsung.
+          Gunakan API Key aktif milik Anda dan unggah foto QRIS untuk menghasilkan QRIS dinamis dengan kode unik.
         </div>
 
         <div class="try-card">
           <div class="field-wrap">
-            <div class="field-label-row">
-              <label class="field-label">API Key Klien</label>
-              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('playApiKey', 'API Key')">📋 Salin</button>
-            </div>
+            <label class="field-label">API Key</label>
             <div class="input-copy-group">
-              <input type="text" id="playApiKey" class="field-input" value="ghx_demo_tester_key_2026"/>
-              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('playApiKey', 'API Key')">📋 Salin</button>
+              <input type="text" id="playApiKey" class="field-input" placeholder="Masukkan API Key Anda"/>
+              <button type="button" class="btn-copy-icon" onclick="copyFieldValue('playApiKey')" title="Salin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
             </div>
-            <small style="color:var(--muted);font-size:11px;margin-top:4px;display:block">Gunakan demo key di atas untuk pengujian, atau masukkan API Key resmi langganan Anda.</small>
           </div>
 
           <div class="field-wrap">
-            <label class="field-label">Target QR Merchant</label>
-            <select id="qrTargetMode" class="field-input" onchange="toggleQrTarget()">
-              <option value="default">QRIS Merchant Default (Server .env)</option>
-              <option value="custom">Gunakan QRIS Toko Lain (Multi-Merchant)</option>
-            </select>
+            <label class="field-label">Upload Foto QRIS</label>
+            <input type="file" id="qrFileInput" accept="image/*" class="field-file" onchange="handleQrUpload(event)"/>
+            <small style="color:var(--muted);font-size:11px;margin-top:4px;display:block" id="qrFileStatus">Pilih file gambar screenshot atau foto QRIS dari galeri perangkat.</small>
           </div>
 
-          <div class="field-wrap" id="customQrWrap" style="display:none">
-            <label class="field-label">Static QRIS String Toko Lain</label>
-            <textarea id="playCustomQr" class="field-textarea" placeholder="000201010211..."></textarea>
+          <div class="field-wrap">
+            <label class="field-label">String QRIS Statis</label>
+            <input type="text" id="playStaticQr" class="field-input" placeholder="Terisi otomatis setelah upload foto, atau masukkan manual"/>
           </div>
 
           <div class="field-wrap">
@@ -271,11 +270,11 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
           </div>
 
           <div class="field-wrap">
-            <label class="field-label">Catatan Transaksi (Opsional)</label>
-            <input type="text" id="playNote" class="field-input" placeholder="Contoh: Order Paket / Topup Saldo"/>
+            <label class="field-label">Catatan Transaksi</label>
+            <input type="text" id="playNote" class="field-input" placeholder="Contoh: Order Paket"/>
           </div>
 
-          <button class="btn btn-primary" onclick="doPlayQris()">⚡ Generate QRIS Sekarang</button>
+          <button class="btn btn-primary" onclick="doPlayQris()">Generate QRIS</button>
 
           <div class="qr-box-result" id="playResult">
             <img id="playImg" src="" alt="QRIS Code"/>
@@ -285,21 +284,27 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
             <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:left;margin-top:12px">
               <div class="field-label-row">
                 <span class="field-label">Check ID</span>
-                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playCheckId').innerText, 'Check ID')">📋 Salin</button>
+                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playCheckId').innerText)" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <code id="playCheckId" style="color:var(--sky);font-size:12px;display:block;margin-bottom:10px"></code>
+              <code id="playCheckId" style="color:var(--sky);font-size:12px;display:block;margin-bottom:12px"></code>
 
               <div class="field-label-row">
-                <span class="field-label">String EMVCo QRIS</span>
-                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playQrString').innerText, 'String QRIS')">📋 Salin String</button>
+                <span class="field-label">String QRIS</span>
+                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playQrString').innerText)" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <div style="background:var(--panel);padding:8px;border-radius:6px;max-height:60px;overflow-y:auto;margin-bottom:10px">
+              <div style="background:var(--panel);padding:8px;border-radius:6px;max-height:60px;overflow-y:auto;margin-bottom:12px">
                 <code id="playQrString" style="color:var(--dim);font-size:11px"></code>
               </div>
 
               <div class="field-label-row">
-                <span class="field-label">Link Gambar QR (PNG)</span>
-                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playQrUrl').innerText, 'Link Gambar QR')">📋 Salin Link</button>
+                <span class="field-label">URL Gambar QR</span>
+                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playQrUrl').innerText)" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
               <code id="playQrUrl" style="color:var(--amber);font-size:11px;display:block"></code>
             </div>
@@ -309,68 +314,67 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
       <!-- 3. SESSION GOMERCH -->
       <section id="session" class="section">
-        <div class="sec-title">🔑 Dapatkan Session GoMerch (GoPay)</div>
+        <div class="sec-title">Session GoMerch</div>
         <div class="callout cl-info">
-          Login menggunakan nomor HP yang terdaftar di akun merchant GoBiz untuk mendapatkan <strong>access_token</strong>, <strong>refresh_token</strong>, dan <strong>merchant_id</strong>.
+          Login akun merchant GoBiz untuk mendapatkan access token, refresh token, dan merchant ID.
         </div>
 
         <div class="try-card">
           <div id="stepPhone">
             <div class="field-wrap">
-              <label class="field-label">Nomor HP Merchant (08xxx atau 628xxx)</label>
-              <input type="tel" id="sessPhone" class="field-input" placeholder="Contoh: 08123456789 atau 628123456789"/>
+              <label class="field-label">Nomor HP Merchant</label>
+              <input type="tel" id="sessPhone" class="field-input" placeholder="08123456789 atau 628123456789"/>
             </div>
-            <button class="btn btn-primary" id="btnReqOtp" onclick="reqOtp()">📲 Kirim Kode OTP (SMS)</button>
+            <button class="btn btn-primary" id="btnReqOtp" onclick="reqOtp()">Kirim Kode OTP</button>
           </div>
 
           <div id="stepOtp" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
             <div class="field-wrap">
-              <label class="field-label">Masukkan Kode OTP dari SMS</label>
-              <input type="text" id="sessOtp" class="field-input" placeholder="Kode OTP 4-6 digit"/>
+              <label class="field-label">Kode OTP</label>
+              <input type="text" id="sessOtp" class="field-input" placeholder="Masukkan 4-6 digit OTP"/>
             </div>
             <div class="btn-row">
-              <button class="btn btn-ghost" onclick="resetOtp()">Ulangi</button>
+              <button class="btn btn-ghost" onclick="resetOtp()">Batal</button>
               <button class="btn btn-green" id="btnVerOtp" onclick="verOtp()">Verifikasi OTP</button>
             </div>
           </div>
 
           <div id="sessResult" style="display:none;margin-top:16px;background:var(--panel);border:1px solid var(--green);border-radius:12px;padding:16px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-              <p style="color:var(--green);font-weight:700">✅ Session Berhasil Didapatkan!</p>
-              <button type="button" class="btn-copy-tag" style="background:var(--green);color:#fff;padding:5px 10px;font-size:11px" onclick="copyAllSession()">📋 Salin Semua (.env)</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <p style="color:var(--green);font-weight:700">Session Berhasil Didapatkan</p>
+              <button type="button" class="btn-copy-icon" onclick="copyAllSession()" title="Salin Semua (.env)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
             </div>
 
             <div class="field-wrap">
               <div class="field-label-row">
                 <label class="field-label">Merchant ID</label>
-                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outMerchantId', 'Merchant ID')">📋 Salin</button>
+                <button type="button" class="btn-copy-icon" onclick="copyFieldValue('outMerchantId')" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <div class="input-copy-group">
-                <input type="text" id="outMerchantId" class="field-input" readonly/>
-                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outMerchantId', 'Merchant ID')">📋 Salin</button>
-              </div>
+              <input type="text" id="outMerchantId" class="field-input" readonly/>
             </div>
 
             <div class="field-wrap">
               <div class="field-label-row">
                 <label class="field-label">Access Token</label>
-                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outAccessToken', 'Access Token')">📋 Salin</button>
+                <button type="button" class="btn-copy-icon" onclick="copyFieldValue('outAccessToken')" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <div class="input-copy-group">
-                <input type="text" id="outAccessToken" class="field-input" readonly/>
-                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outAccessToken', 'Access Token')">📋 Salin</button>
-              </div>
+              <input type="text" id="outAccessToken" class="field-input" readonly/>
             </div>
 
             <div class="field-wrap">
               <div class="field-label-row">
                 <label class="field-label">Refresh Token</label>
-                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outRefreshToken', 'Refresh Token')">📋 Salin</button>
+                <button type="button" class="btn-copy-icon" onclick="copyFieldValue('outRefreshToken')" title="Salin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
               </div>
-              <div class="input-copy-group">
-                <input type="text" id="outRefreshToken" class="field-input" readonly/>
-                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outRefreshToken', 'Refresh Token')">📋 Salin</button>
-              </div>
+              <input type="text" id="outRefreshToken" class="field-input" readonly/>
             </div>
           </div>
         </div>
@@ -378,33 +382,32 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
       <!-- 4. CEK MUTASI REAL-TIME -->
       <section id="mutasi" class="section">
-        <div class="sec-title">📊 Cek Mutasi Transaksi GoPay</div>
+        <div class="sec-title">Mutasi Transaksi GoPay</div>
         <div class="callout cl-info">
-          Gunakan Access Token dan Merchant ID Anda untuk melihat mutasi uang masuk terbaru secara real-time.
+          Gunakan Access Token dan Merchant ID untuk melihat mutasi transaksi secara real-time.
         </div>
 
         <div class="try-card">
           <div class="field-wrap">
-            <div class="field-label-row">
-              <label class="field-label">Access Token</label>
-              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('mutToken', 'Access Token')">📋 Salin</button>
-            </div>
+            <label class="field-label">Access Token</label>
             <div class="input-copy-group">
-              <input type="text" id="mutToken" class="field-input" placeholder="Masukkan Access Token Anda"/>
-              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('mutToken', 'Access Token')">📋 Salin</button>
+              <input type="text" id="mutToken" class="field-input" placeholder="Masukkan Access Token"/>
+              <button type="button" class="btn-copy-icon" onclick="copyFieldValue('mutToken')" title="Salin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
             </div>
           </div>
+
           <div class="field-wrap">
-            <div class="field-label-row">
-              <label class="field-label">Merchant ID</label>
-              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('mutMerchant', 'Merchant ID')">📋 Salin</button>
-            </div>
+            <label class="field-label">Merchant ID</label>
             <div class="input-copy-group">
               <input type="text" id="mutMerchant" class="field-input" placeholder="Contoh: G375309279"/>
-              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('mutMerchant', 'Merchant ID')">📋 Salin</button>
+              <button type="button" class="btn-copy-icon" onclick="copyFieldValue('mutMerchant')" title="Salin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="doGetMutasi()">🔍 Ambil Data Mutasi</button>
+          <button class="btn btn-primary" onclick="doGetMutasi()">Ambil Mutasi</button>
 
           <div id="mutTableWrap" style="display:none;margin-top:20px" class="tbl-wrap">
             <table>
@@ -424,28 +427,33 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
       <!-- 5. DOKUMENTASI REST API -->
       <section id="docs" class="section">
-        <div class="sec-title">📖 Dokumentasi REST API & Integrasi Developer</div>
+        <div class="sec-title">Dokumentasi REST API</div>
         
         <div class="try-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-            <h3 style="color:var(--head);font-size:14px">1. Generate Dynamic QRIS (Wajib Header API Key)</h3>
-            <button type="button" class="btn-copy-tag" onclick="copyCurl(1)">📋 Salin cURL</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">1. Create Transaction (Header x-api-key Wajib)</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(1)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
           <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Sertakan header <code>x-api-key: YOUR_KEY</code>:</p>
           <pre id="curlDoc1" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
   -H "x-api-key: YOUR_API_KEY"</pre>
-          <p style="color:var(--muted);font-size:11.5px;margin-top:8px">Opsional parameter: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code> (jika klien ingin uang masuk ke rekening QR toko mereka sendiri).</p>
+          <p style="color:var(--muted);font-size:11.5px;margin-top:8px">Parameter opsional: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code></p>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-            <h3 style="color:var(--head);font-size:14px">2. Cek Status Pembayaran (Polling)</h3>
-            <button type="button" class="btn-copy-tag" onclick="copyCurl(2)">📋 Salin Endpoint</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">2. Check Status</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(2)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
-          <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Endpoint untuk mengecek apakah pembeli sudah melunasi:</p>
           <pre id="curlDoc2" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/check/:check_id</pre>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-            <h3 style="color:var(--head);font-size:14px">3. URL Gambar QR Langsung (PNG)</h3>
-            <button type="button" class="btn-copy-tag" onclick="copyCurl(3)">📋 Salin Endpoint</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">3. Direct Image QR (PNG)</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(3)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
           <pre id="curlDoc3" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
         </div>
@@ -453,7 +461,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
       <!-- 6. CONTOH KODE INTEGRASI -->
       <section id="snippets" class="section">
-        <div class="sec-title">💻 Contoh Kode Integrasi</div>
+        <div class="sec-title">Contoh Kode Integrasi</div>
         
         <div class="snippet-wrap">
           <div class="snippet-head">
@@ -462,7 +470,9 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
               <button class="snippet-tab" onclick="tabSnippet('py')">Python</button>
               <button class="snippet-tab" onclick="tabSnippet('php')">PHP</button>
             </div>
-            <button class="snippet-copy" onclick="copySnippetCode()">📋 Salin Kode</button>
+            <button type="button" class="btn-copy-icon" onclick="copySnippetCode()" title="Salin Kode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
           <div class="snippet-body" id="codeSnippetBody"></div>
         </div>
@@ -472,21 +482,21 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
     <!-- FOOTER -->
     <footer class="footer">
-      <div>&copy; 2026 <strong>QRIS Payment Gateway</strong> — Multi-Client QRIS Dynamic Payment Gateway Server.</div>
-      <div style="margin-top:4px;color:var(--dim)">Ditenagai oleh Engine Standar EMVCo Bank Indonesia. Dukungan Telegram: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky)">@GallVpnStore</a></div>
+      <div>&copy; 2026 <strong>QRIS Payment Gateway</strong>. Standard EMVCo ASPI / Bank Indonesia.</div>
+      <div style="margin-top:4px;color:var(--dim)">Telegram Support: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky)">@GallVpnStore</a></div>
     </footer>
   </div>
 </div>
 
-<!-- FLOATING TOAST -->
-<div id="toastNotification" class="toast">📋 Berhasil disalin!</div>
+<!-- TOAST -->
+<div id="toastNotification" class="toast">Disalin ke clipboard</div>
 
 <script>
 const BASE_URL = window.location.origin;
 document.getElementById('displayBaseUrl').innerText = BASE_URL;
 document.querySelectorAll('.doc-base').forEach(el => el.innerText = BASE_URL);
 
-// Sidebar Drawer Mobile
+// Sidebar Drawer
 function toggleSidebar() {
   const sb = document.getElementById('appSidebar');
   const ov = document.getElementById('sideOverlay');
@@ -501,24 +511,24 @@ function closeSidebar() {
 // Toast System
 function showToast(text) {
   const t = document.getElementById('toastNotification');
-  t.innerText = '📋 ' + text;
+  t.innerText = text;
   t.classList.add('show');
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(() => {
     t.classList.remove('show');
-  }, 2200);
+  }, 2000);
 }
 
-function copyText(val, label = 'Teks') {
+function copyText(val) {
   if(!val) return;
   navigator.clipboard.writeText(val);
-  showToast(label + ' tersalin!');
+  showToast('Disalin ke clipboard');
 }
 
-function copyFieldValue(elemId, label = 'Nilai') {
+function copyFieldValue(elemId) {
   const el = document.getElementById(elemId);
   if(el && el.value) {
-    copyText(el.value, label);
+    copyText(el.value);
   }
 }
 
@@ -527,12 +537,53 @@ function copyAllSession() {
   const a = document.getElementById('outAccessToken').value;
   const r = document.getElementById('outRefreshToken').value;
   const txt = `GOMERCH_MERCHANT_ID=${m}\nGOMERCH_ACCESS_TOKEN=${a}\nGOMERCH_REFRESH_TOKEN=${r}`;
-  copyText(txt, 'Semua Kredensial (.env)');
+  copyText(txt);
 }
 
 function copyCurl(num) {
   const pre = document.getElementById('curlDoc' + num);
-  if(pre) copyText(pre.innerText, 'Dokumentasi API');
+  if(pre) copyText(pre.innerText);
+}
+
+// Client-Side Image QR Decoder (jsQR)
+function handleQrUpload(e) {
+  const file = e.target.files[0];
+  const statusEl = document.getElementById('qrFileStatus');
+  if (!file) return;
+
+  statusEl.innerText = 'Membaca gambar QRIS...';
+  statusEl.style.color = 'var(--sky)';
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      try {
+        const imgData = ctx.getImageData(0, 0, img.width, img.height);
+        const code = jsQR(imgData.data, imgData.width, imgData.height);
+        if (code && code.data) {
+          document.getElementById('playStaticQr').value = code.data;
+          statusEl.innerText = 'Foto QRIS berhasil terbaca.';
+          statusEl.style.color = 'var(--green)';
+          showToast('QRIS berhasil terbaca dari foto');
+        } else {
+          statusEl.innerText = 'Gagal membaca kode QR. Pastikan foto jelas atau tempel string manual.';
+          statusEl.style.color = 'var(--red)';
+        }
+      } catch(err) {
+        statusEl.innerText = 'Error parsing: ' + err.message;
+        statusEl.style.color = 'var(--red)';
+      }
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 // Theme
@@ -541,25 +592,26 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
 }
 
-function toggleQrTarget() {
-  const mode = document.getElementById('qrTargetMode').value;
-  document.getElementById('customQrWrap').style.display = mode === 'custom' ? 'block' : 'none';
-}
-
 // 1. Playground Generate QRIS
 async function doPlayQris() {
   const apiKey = document.getElementById('playApiKey').value.trim();
   const amt = document.getElementById('playAmount').value;
   const note = document.getElementById('playNote').value;
-  const mode = document.getElementById('qrTargetMode').value;
-  const customQr = document.getElementById('playCustomQr').value.trim();
+  const staticQr = document.getElementById('playStaticQr').value.trim();
   const box = document.getElementById('playResult');
+
+  if(!apiKey) {
+    alert('Masukkan API Key Anda. Silakan hubungi admin @GallVpnStore untuk mendapatkan API Key.');
+    return;
+  }
+  if(!staticQr) {
+    alert('Silakan unggah foto QRIS Anda atau masukkan string QRIS statis terlebih dahulu.');
+    return;
+  }
+
   box.style.display = 'block';
   
-  let url = `${BASE_URL}/api/create?amount=${amt}&note=${encodeURIComponent(note)}`;
-  if(mode === 'custom' && customQr) {
-    url += `&static_qr=${encodeURIComponent(customQr)}`;
-  }
+  let url = `${BASE_URL}/api/create?amount=${amt}&note=${encodeURIComponent(note)}&static_qr=${encodeURIComponent(staticQr)}`;
 
   try {
     const res = await fetch(url, {
@@ -594,7 +646,7 @@ async function reqOtp() {
 
   const btn = document.getElementById('btnReqOtp');
   btn.disabled = true;
-  btn.innerText = 'Mengirim SMS...';
+  btn.innerText = 'Mengirim...';
 
   try {
     const res = await fetch(`${BASE_URL}/gomerch/api/auth/otp`, {
@@ -610,22 +662,22 @@ async function reqOtp() {
         uniqueid: json._uniqueid,
         phone: phone
       };
-      showToast('Kode OTP berhasil dikirim via SMS!');
+      showToast('OTP terkirim via SMS');
       document.getElementById('stepOtp').style.display = 'block';
     } else {
-      alert('Gagal: ' + (json.errors?.[0]?.message || json.message || 'Periksa nomor HP Anda.'));
+      alert('Gagal: ' + (json.errors?.[0]?.message || json.message || 'Periksa nomor HP.'));
     }
   } catch(e) {
     alert('Koneksi gagal: ' + e.message);
   } finally {
     btn.disabled = false;
-    btn.innerText = '📲 Kirim Kode OTP (SMS)';
+    btn.innerText = 'Kirim Kode OTP';
   }
 }
 
 async function verOtp() {
   const otp = document.getElementById('sessOtp').value.trim();
-  if(!otp) return alert('Masukkan kode OTP terlebih dahulu!');
+  if(!otp) return alert('Masukkan kode OTP!');
 
   const btn = document.getElementById('btnVerOtp');
   btn.disabled = true;
@@ -665,7 +717,7 @@ async function verOtp() {
       
       document.getElementById('mutToken').value = accessToken;
       document.getElementById('mutMerchant').value = merchantId;
-      showToast('Verifikasi Berhasil! Token tersimpan.');
+      showToast('Verifikasi Berhasil');
     } else {
       alert('Verifikasi gagal: ' + (json.errors?.[0]?.message || json.message || 'OTP tidak valid'));
     }
@@ -692,7 +744,7 @@ async function doGetMutasi() {
   const wrap = document.getElementById('mutTableWrap');
   const tbody = document.getElementById('mutBody');
   wrap.style.display = 'block';
-  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Mengambil data mutasi GoPay...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Memuat mutasi...</td></tr>';
 
   try {
     const res = await fetch(`${BASE_URL}/gomerch/api/transactions`, {
@@ -709,7 +761,7 @@ async function doGetMutasi() {
     if(json.success && json.data && json.data.transactions) {
       tbody.innerHTML = '';
       if(json.data.transactions.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Belum ada mutasi transaksi masuk.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Belum ada transaksi.</td></tr>';
         return;
       }
       json.data.transactions.forEach(t => {
@@ -718,7 +770,7 @@ async function doGetMutasi() {
             <td><code>${t.order_id || t.id || '-'}</code></td>
             <td>${t.created_at || t.time || '-'}</td>
             <td><b>Rp ${Number(t.amount).toLocaleString('id-ID')}</b></td>
-            <td><span class="tag-active">${t.status || 'SUCCESS'}</span></td>
+            <td><span>${t.status || 'SUCCESS'}</span></td>
           </tr>
         `;
       });
@@ -732,7 +784,7 @@ async function doGetMutasi() {
 
 // Snippets
 const SNIPPETS = {
-  js: `// Integrasi Node.js (Fetch)
+  js: `// Node.js (Fetch)
 const BASE = "${BASE_URL}";
 const res = await fetch(BASE + "/api/create?amount=15000", {
   headers: { "x-api-key": "MASUKKAN_API_KEY_ANDA" }
@@ -742,16 +794,16 @@ const data = await res.json();
 console.log("QR Image:", data.data.qr_image);
 console.log("Total Bayar:", data.data.total_amount);
 
-// Polling Cek Status Pembayaran
+// Polling Cek Status
 const checkId = data.data.check_id;
 const timer = setInterval(async () => {
   const chk = await (await fetch(BASE + "/api/check/" + checkId)).json();
   if (chk.data && chk.data.status === "PAID") {
-    console.log("Pembayaran Berhasil Lunas!");
+    console.log("Pembayaran Lunas");
     clearInterval(timer);
   }
 }, 5000);`,
-  py: `# Integrasi Python (requests)
+  py: `# Python (requests)
 import requests, time
 
 BASE = "${BASE_URL}"
@@ -764,10 +816,10 @@ while True:
     time.sleep(5)
     chk = requests.get(f"{BASE}/api/check/{check_id}").json()
     if chk.get("data", {}).get("status") == "PAID":
-        print("LUNAS!")
+        print("LUNAS")
         break`,
   php: `<?php
-// Integrasi PHP (cURL dengan Header API Key)
+// PHP cURL
 $base = "${BASE_URL}";
 $ch = curl_init($base . "/api/create?amount=15000");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -777,7 +829,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 $res = curl_exec($ch);
 curl_close($ch);
 $data = json_decode($res, true);
-echo "Total Bayar: Rp " . number_format($data['data']['total_amount']);
+echo "Total: Rp " . number_format($data['data']['total_amount']);
 ?>`
 };
 
@@ -789,7 +841,7 @@ function tabSnippet(tab) {
   document.getElementById('codeSnippetBody').innerText = SNIPPETS[tab];
 }
 function copySnippetCode() {
-  copyText(SNIPPETS[activeTab], 'Kode Integrasi');
+  copyText(SNIPPETS[activeTab]);
 }
 
 // Inisialisasi awal snippet
