@@ -27,63 +27,83 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+html, body{max-width:100%;overflow-x:hidden;position:relative}
 body{font-family:var(--sans);background:var(--ink);color:var(--body);font-size:14px;line-height:1.6}
 a{color:inherit;text-decoration:none}
 button{font-family:var(--sans);cursor:pointer;border:none;outline:none}
-input,textarea,select{font-family:var(--mono)}
-code{font-family:var(--mono);word-break:break-all}
-::-webkit-scrollbar{width:5px;height:5px}
+input,textarea,select{font-family:var(--mono);max-width:100%;box-sizing:border-box}
+code{font-family:var(--mono);word-break:break-all;overflow-wrap:anywhere}
+pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere;box-sizing:border-box}
+::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:10px}
 
-.app{display:flex;min-height:100vh}
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);position:fixed;inset:0 auto 0 0;overflow-y:auto;z-index:200;display:flex;flex-direction:column}
+/* App Layout */
+.app{display:flex;min-height:100vh;width:100%;max-width:100vw;overflow-x:hidden}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);position:fixed;inset:0 auto 0 0;overflow-y:auto;z-index:300;display:flex;flex-direction:column;transition:transform .25s ease}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(3px);z-index:250;opacity:0;transition:opacity .25s ease}
+.sidebar-overlay.active{display:block;opacity:1}
+
 .s-logo{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
 .s-logo-inner{display:flex;align-items:center;gap:10px}
 .s-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#1a73e8,#0d47a1);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px var(--blue-glow);color:#fff;font-weight:900}
 .s-name{font-weight:800;font-size:15px;color:var(--head);letter-spacing:-.02em}
+.s-close{display:none;background:transparent;color:var(--dim);font-size:20px;padding:4px 8px;border-radius:6px}
+
 .nav{padding:14px 0;flex:1}
 .nav-grp-label{padding:12px 20px 6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .nav-a{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:var(--dim);border-left:3px solid transparent;transition:all .2s}
 .nav-a:hover{color:var(--sky);background:var(--panel)}
 .nav-a.active{color:var(--sky);border-left-color:var(--sky);background:var(--blue-dim);font-weight:600}
 
-.main{margin-left:var(--sidebar-w);flex:1;min-width:0;width:100%}
-.topbar{height:var(--topbar-h);position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:12px;backdrop-filter:blur(12px)}
-.t-bread{flex:1;font-family:var(--mono);font-size:11px;color:var(--muted)}
-.t-online{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--green);font-weight:700;background:var(--green-dim);border:1px solid rgba(16,185,129,.3);padding:5px 12px;border-radius:99px}
+/* Main Area */
+.main{margin-left:var(--sidebar-w);flex:1;min-width:0;width:100%;max-width:100%;overflow-x:hidden}
+.topbar{height:var(--topbar-h);position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:10px;backdrop-filter:blur(12px);max-width:100vw;box-sizing:border-box}
+.t-menu-btn{display:none;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--head);font-size:18px}
+.t-bread{flex:1;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-online{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--green);font-weight:700;background:var(--green-dim);border:1px solid rgba(16,185,129,.3);padding:5px 12px;border-radius:99px;white-space:nowrap}
 .t-pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}70%{box-shadow:0 0 0 7px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
-.t-theme{background:var(--panel);border:1.5px solid var(--line2);color:var(--dim);padding:6px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer}
+.t-theme{background:var(--panel);border:1.5px solid var(--line2);color:var(--dim);padding:6px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
 
-.content{max-width:880px;margin:0 auto;padding:40px 24px 0}
-.section{margin-bottom:64px;scroll-margin-top:calc(var(--topbar-h) + 24px)}
-.hero-band{background:linear-gradient(135deg,rgba(26,115,232,.15),rgba(56,189,248,.08));border:1px solid var(--line);border-radius:20px;padding:32px;margin-bottom:32px}
-.hero-tag{display:inline-flex;align-items:center;font-family:var(--mono);font-size:10px;font-weight:800;background:var(--blue-dim);color:var(--sky);border:1px solid var(--blue-glow);padding:4px 12px;border-radius:99px;margin-bottom:14px;text-transform:uppercase}
-.page-title{font-size:clamp(26px,5vw,38px);font-weight:800;color:var(--head);letter-spacing:-.03em;line-height:1.2;margin-bottom:12px}
-.page-sub{font-size:14.5px;color:var(--dim);line-height:1.7;margin-bottom:24px}
-.hero-meta-row{display:flex;flex-wrap:wrap;gap:10px}
-.meta-chip{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px}
+.content{max-width:880px;margin:0 auto;padding:36px 20px 0;width:100%;box-sizing:border-box}
+.section{margin-bottom:56px;scroll-margin-top:calc(var(--topbar-h) + 20px)}
+.hero-band{background:linear-gradient(135deg,rgba(26,115,232,.15),rgba(56,189,248,.08));border:1px solid var(--line);border-radius:20px;padding:28px 24px;margin-bottom:28px}
+.hero-tag{display:inline-flex;align-items:center;font-family:var(--mono);font-size:10px;font-weight:800;background:var(--blue-dim);color:var(--sky);border:1px solid var(--blue-glow);padding:4px 12px;border-radius:99px;margin-bottom:12px;text-transform:uppercase}
+.page-title{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--head);letter-spacing:-.03em;line-height:1.25;margin-bottom:12px;word-break:break-word}
+.page-sub{font-size:14px;color:var(--dim);line-height:1.7;margin-bottom:20px}
+.hero-meta-row{display:flex;flex-wrap:wrap;gap:8px}
+.meta-chip{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:12px;word-break:break-word}
 
-.sec-title{font-size:18px;font-weight:700;color:var(--head);margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px}
-.info-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;transition:all .2s}
+.sec-title{font-size:17px;font-weight:700;color:var(--head);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.info-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;transition:all .2s}
 .info-card:hover{border-color:var(--sky);transform:translateY(-2px)}
-.ic-title{font-size:14px;font-weight:700;color:var(--head);margin-bottom:6px}
-.ic-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+.ic-title{font-size:13.5px;font-weight:700;color:var(--head);margin-bottom:6px}
+.ic-desc{font-size:12px;color:var(--muted);line-height:1.6}
 
-.callout{padding:14px 18px;border-radius:12px;font-size:13px;margin-bottom:20px;border-left:4px solid transparent;line-height:1.6}
+.callout{padding:14px 16px;border-radius:12px;font-size:13px;margin-bottom:18px;border-left:4px solid transparent;line-height:1.6}
 .cl-info{background:var(--blue-dim);border-left-color:var(--blue);color:var(--body)}
 .cl-green{background:var(--green-dim);border-left-color:var(--green);color:var(--body)}
 .cl-amber{background:var(--amber-dim);border-left-color:var(--amber);color:var(--body)}
 
-.try-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:24px}
+.try-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:24px}
 .field-wrap{margin-bottom:16px}
-.field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase}
-.field-input, .field-textarea{width:100%;background:var(--panel);border:1.5px solid var(--line2);color:var(--head);padding:12px 14px;border-radius:10px;outline:none;font-size:13px;transition:all .2s}
+.field-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.btn-copy-tag{background:var(--line2);color:var(--sky);border:1px solid var(--line);padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-copy-tag:hover{background:var(--blue);color:#fff}
+
+.field-input, .field-textarea{width:100%;background:var(--panel);border:1.5px solid var(--line2);color:var(--head);padding:11px 13px;border-radius:9px;outline:none;font-size:13px;transition:all .2s;box-sizing:border-box}
 .field-input:focus, .field-textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--blue-dim)}
 .field-textarea{resize:vertical;min-height:70px}
 
-.btn{width:100%;padding:13px;border-radius:10px;font-weight:800;font-size:13.5px;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
+/* Input with inline copy button */
+.input-copy-group{position:relative;display:flex;align-items:center;width:100%}
+.input-copy-group .field-input{padding-right:76px;text-overflow:ellipsis}
+.btn-inline-copy{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--line2);color:var(--sky);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .2s}
+.btn-inline-copy:hover{background:var(--blue);color:#fff}
+
+.btn{width:100%;padding:12px;border-radius:9px;font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;box-shadow:0 4px 14px var(--blue-glow)}
 .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
 .btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
@@ -92,54 +112,70 @@ code{font-family:var(--mono);word-break:break-all}
 .btn-ghost{background:var(--panel);color:var(--dim);border:1.5px solid var(--line2)}
 .btn-row{display:flex;gap:10px}
 
-.snippet-wrap{margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#010d1f}
-.snippet-head{display:flex;align-items:center;justify-content:space-between;background:var(--panel);padding:8px 14px;border-bottom:1px solid var(--line)}
+.snippet-wrap{margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#010d1f;max-width:100%}
+.snippet-head{display:flex;align-items:center;justify-content:space-between;background:var(--panel);padding:8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
 .snippet-tabs{display:flex;gap:4px}
-.snippet-tab{padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--dim);border-radius:6px;cursor:pointer;font-family:var(--mono);background:transparent}
+.snippet-tab{padding:5px 11px;font-size:11px;font-weight:700;color:var(--dim);border-radius:6px;cursor:pointer;font-family:var(--mono);background:transparent}
 .snippet-tab.active{background:var(--surface);color:var(--sky)}
 .snippet-copy{background:rgba(255,255,255,.1);color:var(--sky);border:1px solid rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
-.snippet-body{padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;color:#7bbde8;overflow-x:auto;white-space:pre}
+.snippet-body{padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;color:#7bbde8;overflow-x:auto;white-space:pre;max-width:100%}
 
 .qr-box-result{display:none;margin-top:20px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
-.qr-box-result img{max-width:200px;background:#fff;padding:8px;border-radius:10px;margin-bottom:12px}
+.qr-box-result img{max-width:200px;width:100%;height:auto;background:#fff;padding:8px;border-radius:10px;margin-bottom:12px}
 
-.tbl-wrap{overflow-x:auto;width:100%}
-table{width:100%;border-collapse:collapse}
+.tbl-wrap{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:440px}
 th, td{padding:10px 12px;border-bottom:1px solid var(--line);font-size:12px;text-align:left}
 th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase}
 
-.tag-active{background:var(--green-dim);color:var(--green);padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px}
-.tag-suspend{background:var(--red-dim);color:var(--red);padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px}
+.footer{margin-top:50px;padding:28px 20px;background:var(--surface);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
 
-.footer{margin-top:60px;padding:32px 24px;background:var(--surface);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
+/* Toast Notification */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--green);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
+/* Responsive Breakpoints */
 @media(max-width:768px){
-  .sidebar{display:none}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .s-close{display:block}
+  .t-menu-btn{display:flex}
   .main{margin-left:0}
   .grid-2{grid-template-columns:1fr}
+  .topbar{padding:0 12px}
+  .t-bread{display:none}
+  .content{padding:20px 12px 0}
+  .hero-band{padding:20px 14px}
+  .try-card{padding:18px 14px}
+  .btn-row{flex-direction:column}
+  table{min-width:380px}
 }
 </style>
 </head>
 <body>
+
+<div class="sidebar-overlay" id="sideOverlay" onclick="closeSidebar()"></div>
+
 <div class="app">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="appSidebar">
     <div class="s-logo">
       <div class="s-logo-inner">
         <div class="s-icon">Q</div>
         <div class="s-name">QRIS Gateway</div>
       </div>
+      <button class="s-close" onclick="closeSidebar()" aria-label="Tutup Menu">✕</button>
     </div>
     <nav class="nav">
       <div class="nav-grp-label">Navigasi</div>
-      <a href="#overview" class="nav-a active">Overview</a>
-      <a href="#generator" class="nav-a">Generate QRIS Dinamis</a>
-      <a href="#session" class="nav-a">Session GoMerch</a>
-      <a href="#mutasi" class="nav-a">Cek Mutasi Transaksi</a>
+      <a href="#overview" class="nav-a active" onclick="closeSidebar()">Overview</a>
+      <a href="#generator" class="nav-a" onclick="closeSidebar()">Generate QRIS Dinamis</a>
+      <a href="#session" class="nav-a" onclick="closeSidebar()">Session GoMerch</a>
+      <a href="#mutasi" class="nav-a" onclick="closeSidebar()">Cek Mutasi Transaksi</a>
       <div class="nav-grp-label">Integrasi Developer</div>
-      <a href="#docs" class="nav-a">Dokumentasi REST API</a>
-      <a href="#snippets" class="nav-a">Contoh Kode Integrasi</a>
+      <a href="#docs" class="nav-a" onclick="closeSidebar()">Dokumentasi REST API</a>
+      <a href="#snippets" class="nav-a" onclick="closeSidebar()">Contoh Kode Integrasi</a>
       <div class="nav-grp-label">Portal Pemilik</div>
       <a href="/admin" class="nav-a" style="color:var(--amber)">👑 Admin Dashboard &rarr;</a>
     </nav>
@@ -152,6 +188,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
   <!-- MAIN CONTENT -->
   <div class="main">
     <div class="topbar">
+      <button class="t-menu-btn" onclick="toggleSidebar()" aria-label="Buka Menu">☰</button>
       <div class="t-bread">gateway / api / v2.0</div>
       <div class="t-online"><div class="t-pulse"></div><span>API Ready</span></div>
       <a href="/admin" class="t-theme" style="color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:6px">👑 <span>Portal Admin</span></a>
@@ -164,49 +201,57 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
       <section id="overview" class="section">
         <div class="hero-band">
           <div class="hero-tag">Official Gateway API</div>
-          <h1 class="page-title">QRIS Dynamic<br/>Payment Gateway</h1>
-          <p class="page-sub">Server gateway performa tinggi yang mengubah QRIS statis menjadi QRIS dinamis dengan nominal otomatis, kode unik verifikasi, dan dukungan cek mutasi GoMerch secara real-time.</p>
+          <h1 class="page-title">SaaS QRIS Dynamic Payment Gateway</h1>
+          <p class="page-sub">
+            Solusi integrasi pembayaran otomatis GoPay QRIS 24/7 dengan kode unik dynamic nominal, validasi instan, dan multi-client API Key subscription engine.
+          </p>
           <div class="hero-meta-row">
-            <div class="meta-chip"><strong>Base URL:</strong>&nbsp;<code id="displayBaseUrl" style="color:var(--sky)"></code></div>
-            <div class="meta-chip"><strong>Standard:</strong>&nbsp;<code>EMVCo / Bank Indonesia</code></div>
-            <div class="meta-chip"><strong>Auth:</strong>&nbsp;<code>API Key Protected</code></div>
+            <div class="meta-chip">Standard: <strong>EMVCo ASPI / BI</strong></div>
+            <div class="meta-chip">Proxy: <strong>Universal GoMerch</strong></div>
+            <div class="meta-chip">Domain: <strong id="displayBaseUrl">Loading...</strong></div>
           </div>
         </div>
 
-        <div class="sec-title">Fitur & Keunggulan</div>
         <div class="grid-2">
           <div class="info-card">
-            <div class="ic-title">🚀 Standar Resmi EMVCo QRIS</div>
-            <div class="ic-desc">Mengubah QRIS statis apa pun menjadi QRIS dinamis ber-nominal otomatis dengan kalkulasi checksum CRC16-CCITT standar resmi Bank Indonesia & ASPI.</div>
+            <div class="ic-title">⚡ Dynamic Unique Amount</div>
+            <div class="ic-desc">Setiap transaksi dibuat dengan nominal dasar ditambah 3 digit kode acak unik (100 - 300) untuk mencocokkan mutasi rekening secara akurat tanpa bentrok.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">🔢 Unique Amount Engine</div>
-            <div class="ic-desc">Menyisipkan 3 digit kode acak unik (100 - 300) agar verifikasi pembayaran dapat dicocokkan otomatis antar pembeli.</div>
+            <div class="ic-title">🔒 Multi-Client Subscription</div>
+            <div class="ic-desc">Setiap klien pembeli diberikan API Key eksklusif dengan masa aktif (30/60/90 hari) yang bisa dikelola penuh dari dashboard pemilik.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">🔑 Sistem Langganan API Key</div>
-            <div class="ic-desc">Setiap klien/pembeli layanan memiliki API Key dengan masa aktif otomatis (misal 30 hari). Bisa diperpanjang atau dinonaktifkan kapan saja.</div>
+            <div class="ic-title">🏪 Multi-Merchant Support</div>
+            <div class="ic-desc">Klien dapat menggunakan QRIS toko default Anda atau menempelkan QRIS toko GoPay mereka sendiri agar uang langsung masuk ke rekening pembeli.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">👥 Multi-Merchant Ready</div>
-            <div class="ic-desc">Klien dapat mengirimkan string static QR toko mereka sendiri saat membuat tagihan, atau menggunakan QR default yang terpasang di server.</div>
+            <div class="ic-title">🤖 Support Telegram Support</div>
+            <div class="ic-desc">Bantuan teknis dan perpanjangan sewa API Gateway resmi melalui Telegram Support: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky);font-weight:700">@GallVpnStore</a>.</div>
           </div>
         </div>
       </section>
 
-      <!-- 2. GENERATOR QRIS PLAYGROUND -->
+      <!-- 2. GENERATOR TESTING PLAYGROUND -->
       <section id="generator" class="section">
-        <div class="sec-title">⚡ Playground Generate Dynamic QRIS</div>
+        <div class="sec-title">🎯 Coba Langsung: Generate QRIS Dinamis</div>
         <div class="callout cl-green">
           Masukkan nominal pembayaran di bawah ini untuk melihat hasil QRIS dinamis beserta kode uniknya secara langsung.
         </div>
 
         <div class="try-card">
           <div class="field-wrap">
-            <label class="field-label">API Key Klien</label>
-            <input type="text" id="playApiKey" class="field-input" value="ghx_demo_tester_key_2026"/>
-            <small style="color:var(--muted);font-size:11px">Gunakan demo key di atas untuk pengujian, atau masukkan API Key resmi langganan Anda.</small>
+            <div class="field-label-row">
+              <label class="field-label">API Key Klien</label>
+              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('playApiKey', 'API Key')">📋 Salin</button>
+            </div>
+            <div class="input-copy-group">
+              <input type="text" id="playApiKey" class="field-input" value="ghx_demo_tester_key_2026"/>
+              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('playApiKey', 'API Key')">📋 Salin</button>
+            </div>
+            <small style="color:var(--muted);font-size:11px;margin-top:4px;display:block">Gunakan demo key di atas untuk pengujian, atau masukkan API Key resmi langganan Anda.</small>
           </div>
+
           <div class="field-wrap">
             <label class="field-label">Target QR Merchant</label>
             <select id="qrTargetMode" class="field-input" onchange="toggleQrTarget()">
@@ -214,25 +259,50 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
               <option value="custom">Gunakan QRIS Toko Lain (Multi-Merchant)</option>
             </select>
           </div>
+
           <div class="field-wrap" id="customQrWrap" style="display:none">
             <label class="field-label">Static QRIS String Toko Lain</label>
             <textarea id="playCustomQr" class="field-textarea" placeholder="000201010211..."></textarea>
           </div>
+
           <div class="field-wrap">
             <label class="field-label">Nominal Pembayaran (Rp)</label>
             <input type="number" id="playAmount" class="field-input" value="10000" min="500" step="500"/>
           </div>
+
           <div class="field-wrap">
             <label class="field-label">Catatan Transaksi (Opsional)</label>
             <input type="text" id="playNote" class="field-input" placeholder="Contoh: Order Paket / Topup Saldo"/>
           </div>
-          <button class="btn btn-primary" onclick="doPlayQris()">Generate QRIS Sekarang</button>
+
+          <button class="btn btn-primary" onclick="doPlayQris()">⚡ Generate QRIS Sekarang</button>
 
           <div class="qr-box-result" id="playResult">
             <img id="playImg" src="" alt="QRIS Code"/>
             <h2 id="playTotal" style="color:var(--green);font-size:1.6rem;margin-bottom:4px"></h2>
-            <p style="color:var(--muted);font-size:12px" id="playDetail"></p>
-            <p style="margin-top:8px">Check ID: <code id="playCheckId" style="color:var(--sky)"></code></p>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:12px" id="playDetail"></p>
+
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:left;margin-top:12px">
+              <div class="field-label-row">
+                <span class="field-label">Check ID</span>
+                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playCheckId').innerText, 'Check ID')">📋 Salin</button>
+              </div>
+              <code id="playCheckId" style="color:var(--sky);font-size:12px;display:block;margin-bottom:10px"></code>
+
+              <div class="field-label-row">
+                <span class="field-label">String EMVCo QRIS</span>
+                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playQrString').innerText, 'String QRIS')">📋 Salin String</button>
+              </div>
+              <div style="background:var(--panel);padding:8px;border-radius:6px;max-height:60px;overflow-y:auto;margin-bottom:10px">
+                <code id="playQrString" style="color:var(--dim);font-size:11px"></code>
+              </div>
+
+              <div class="field-label-row">
+                <span class="field-label">Link Gambar QR (PNG)</span>
+                <button type="button" class="btn-copy-tag" onclick="copyText(document.getElementById('playQrUrl').innerText, 'Link Gambar QR')">📋 Salin Link</button>
+              </div>
+              <code id="playQrUrl" style="color:var(--amber);font-size:11px;display:block"></code>
+            </div>
           </div>
         </div>
       </section>
@@ -247,16 +317,16 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         <div class="try-card">
           <div id="stepPhone">
             <div class="field-wrap">
-              <label class="field-label">Nomor HP Merchant (Bisa 08xxx atau 628xxx)</label>
+              <label class="field-label">Nomor HP Merchant (08xxx atau 628xxx)</label>
               <input type="tel" id="sessPhone" class="field-input" placeholder="Contoh: 08123456789 atau 628123456789"/>
             </div>
-            <button class="btn btn-primary" id="btnReqOtp" onclick="reqOtp()">Kirim Kode OTP (SMS)</button>
+            <button class="btn btn-primary" id="btnReqOtp" onclick="reqOtp()">📲 Kirim Kode OTP (SMS)</button>
           </div>
 
           <div id="stepOtp" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
             <div class="field-wrap">
               <label class="field-label">Masukkan Kode OTP dari SMS</label>
-              <input type="text" id="sessOtp" class="field-input" placeholder="Kode OTP 4-6 digit dari SMS"/>
+              <input type="text" id="sessOtp" class="field-input" placeholder="Kode OTP 4-6 digit"/>
             </div>
             <div class="btn-row">
               <button class="btn btn-ghost" onclick="resetOtp()">Ulangi</button>
@@ -265,18 +335,42 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
           </div>
 
           <div id="sessResult" style="display:none;margin-top:16px;background:var(--panel);border:1px solid var(--green);border-radius:12px;padding:16px">
-            <p style="color:var(--green);font-weight:700;margin-bottom:8px">✅ Session Berhasil Didapatkan!</p>
-            <div class="field-wrap">
-              <label class="field-label">Merchant ID</label>
-              <input type="text" id="outMerchantId" class="field-input" readonly/>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+              <p style="color:var(--green);font-weight:700">✅ Session Berhasil Didapatkan!</p>
+              <button type="button" class="btn-copy-tag" style="background:var(--green);color:#fff;padding:5px 10px;font-size:11px" onclick="copyAllSession()">📋 Salin Semua (.env)</button>
             </div>
+
             <div class="field-wrap">
-              <label class="field-label">Access Token</label>
-              <input type="text" id="outAccessToken" class="field-input" readonly/>
+              <div class="field-label-row">
+                <label class="field-label">Merchant ID</label>
+                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outMerchantId', 'Merchant ID')">📋 Salin</button>
+              </div>
+              <div class="input-copy-group">
+                <input type="text" id="outMerchantId" class="field-input" readonly/>
+                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outMerchantId', 'Merchant ID')">📋 Salin</button>
+              </div>
             </div>
+
             <div class="field-wrap">
-              <label class="field-label">Refresh Token</label>
-              <input type="text" id="outRefreshToken" class="field-input" readonly/>
+              <div class="field-label-row">
+                <label class="field-label">Access Token</label>
+                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outAccessToken', 'Access Token')">📋 Salin</button>
+              </div>
+              <div class="input-copy-group">
+                <input type="text" id="outAccessToken" class="field-input" readonly/>
+                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outAccessToken', 'Access Token')">📋 Salin</button>
+              </div>
+            </div>
+
+            <div class="field-wrap">
+              <div class="field-label-row">
+                <label class="field-label">Refresh Token</label>
+                <button type="button" class="btn-copy-tag" onclick="copyFieldValue('outRefreshToken', 'Refresh Token')">📋 Salin</button>
+              </div>
+              <div class="input-copy-group">
+                <input type="text" id="outRefreshToken" class="field-input" readonly/>
+                <button type="button" class="btn-inline-copy" onclick="copyFieldValue('outRefreshToken', 'Refresh Token')">📋 Salin</button>
+              </div>
             </div>
           </div>
         </div>
@@ -291,14 +385,26 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
 
         <div class="try-card">
           <div class="field-wrap">
-            <label class="field-label">Access Token</label>
-            <input type="text" id="mutToken" class="field-input" placeholder="Masukkan Access Token Anda"/>
+            <div class="field-label-row">
+              <label class="field-label">Access Token</label>
+              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('mutToken', 'Access Token')">📋 Salin</button>
+            </div>
+            <div class="input-copy-group">
+              <input type="text" id="mutToken" class="field-input" placeholder="Masukkan Access Token Anda"/>
+              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('mutToken', 'Access Token')">📋 Salin</button>
+            </div>
           </div>
           <div class="field-wrap">
-            <label class="field-label">Merchant ID</label>
-            <input type="text" id="mutMerchant" class="field-input" placeholder="Contoh: G375309279"/>
+            <div class="field-label-row">
+              <label class="field-label">Merchant ID</label>
+              <button type="button" class="btn-copy-tag" onclick="copyFieldValue('mutMerchant', 'Merchant ID')">📋 Salin</button>
+            </div>
+            <div class="input-copy-group">
+              <input type="text" id="mutMerchant" class="field-input" placeholder="Contoh: G375309279"/>
+              <button type="button" class="btn-inline-copy" onclick="copyFieldValue('mutMerchant', 'Merchant ID')">📋 Salin</button>
+            </div>
           </div>
-          <button class="btn btn-primary" onclick="doGetMutasi()">Ambil Data Mutasi</button>
+          <button class="btn btn-primary" onclick="doGetMutasi()">🔍 Ambil Data Mutasi</button>
 
           <div id="mutTableWrap" style="display:none;margin-top:20px" class="tbl-wrap">
             <table>
@@ -321,18 +427,27 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         <div class="sec-title">📖 Dokumentasi REST API & Integrasi Developer</div>
         
         <div class="try-card">
-          <h3 style="color:var(--head);font-size:15px;margin-bottom:8px">1. Generate Dynamic QRIS (Wajib Header API Key)</h3>
-          <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Sertakan header <code>x-api-key: YOUR_KEY</code>:</p>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+            <h3 style="color:var(--head);font-size:14px">1. Generate Dynamic QRIS (Wajib Header API Key)</h3>
+            <button type="button" class="btn-copy-tag" onclick="copyCurl(1)">📋 Salin cURL</button>
+          </div>
+          <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Sertakan header <code>x-api-key: YOUR_KEY</code>:</p>
+          <pre id="curlDoc1" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
   -H "x-api-key: YOUR_API_KEY"</pre>
-          <p style="color:var(--muted);font-size:12px;margin-top:6px">Opsional parameter: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code> (jika klien ingin uang masuk ke rekening QR toko mereka sendiri).</p>
+          <p style="color:var(--muted);font-size:11.5px;margin-top:8px">Opsional parameter: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code> (jika klien ingin uang masuk ke rekening QR toko mereka sendiri).</p>
 
-          <h3 style="color:var(--head);font-size:15px;margin-top:20px;margin-bottom:8px">2. Cek Status Pembayaran (Polling)</h3>
-          <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Endpoint untuk mengecek apakah pembeli sudah melunasi:</p>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">GET <span class="doc-base"></span>/api/check/:check_id</pre>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+            <h3 style="color:var(--head);font-size:14px">2. Cek Status Pembayaran (Polling)</h3>
+            <button type="button" class="btn-copy-tag" onclick="copyCurl(2)">📋 Salin Endpoint</button>
+          </div>
+          <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Endpoint untuk mengecek apakah pembeli sudah melunasi:</p>
+          <pre id="curlDoc2" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/check/:check_id</pre>
 
-          <h3 style="color:var(--head);font-size:15px;margin-top:20px;margin-bottom:8px">3. URL Gambar QR Langsung (PNG)</h3>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+            <h3 style="color:var(--head);font-size:14px">3. URL Gambar QR Langsung (PNG)</h3>
+            <button type="button" class="btn-copy-tag" onclick="copyCurl(3)">📋 Salin Endpoint</button>
+          </div>
+          <pre id="curlDoc3" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
         </div>
       </section>
 
@@ -347,34 +462,80 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
               <button class="snippet-tab" onclick="tabSnippet('py')">Python</button>
               <button class="snippet-tab" onclick="tabSnippet('php')">PHP</button>
             </div>
-            <button class="snippet-copy" onclick="copySnippetCode()">Salin Kode</button>
+            <button class="snippet-copy" onclick="copySnippetCode()">📋 Salin Kode</button>
           </div>
           <div class="snippet-body" id="codeSnippetBody"></div>
         </div>
       </section>
 
-      </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="footer">
       <div>&copy; 2026 <strong>QRIS Payment Gateway</strong> — Multi-Client QRIS Dynamic Payment Gateway Server.</div>
-      <div style="margin-top:4px;color:var(--dim)">Ditenagai oleh Engine Standar EMVCo Bank Indonesia.</div>
+      <div style="margin-top:4px;color:var(--dim)">Ditenagai oleh Engine Standar EMVCo Bank Indonesia. Dukungan Telegram: <a href="https://t.me/GallVpnStore" target="_blank" style="color:var(--sky)">@GallVpnStore</a></div>
     </footer>
   </div>
 </div>
+
+<!-- FLOATING TOAST -->
+<div id="toastNotification" class="toast">📋 Berhasil disalin!</div>
 
 <script>
 const BASE_URL = window.location.origin;
 document.getElementById('displayBaseUrl').innerText = BASE_URL;
 document.querySelectorAll('.doc-base').forEach(el => el.innerText = BASE_URL);
 
-window._gomerch_sess = {};
-let currentAdminSecret = localStorage.getItem('ghx_admin_secret') || '';
-
-if(currentAdminSecret) {
-  document.getElementById('adminSecretInput').value = currentAdminSecret;
+// Sidebar Drawer Mobile
+function toggleSidebar() {
+  const sb = document.getElementById('appSidebar');
+  const ov = document.getElementById('sideOverlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('active');
+}
+function closeSidebar() {
+  document.getElementById('appSidebar').classList.remove('open');
+  document.getElementById('sideOverlay').classList.remove('active');
 }
 
+// Toast System
+function showToast(text) {
+  const t = document.getElementById('toastNotification');
+  t.innerText = '📋 ' + text;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    t.classList.remove('show');
+  }, 2200);
+}
+
+function copyText(val, label = 'Teks') {
+  if(!val) return;
+  navigator.clipboard.writeText(val);
+  showToast(label + ' tersalin!');
+}
+
+function copyFieldValue(elemId, label = 'Nilai') {
+  const el = document.getElementById(elemId);
+  if(el && el.value) {
+    copyText(el.value, label);
+  }
+}
+
+function copyAllSession() {
+  const m = document.getElementById('outMerchantId').value;
+  const a = document.getElementById('outAccessToken').value;
+  const r = document.getElementById('outRefreshToken').value;
+  const txt = `GOMERCH_MERCHANT_ID=${m}\nGOMERCH_ACCESS_TOKEN=${a}\nGOMERCH_REFRESH_TOKEN=${r}`;
+  copyText(txt, 'Semua Kredensial (.env)');
+}
+
+function copyCurl(num) {
+  const pre = document.getElementById('curlDoc' + num);
+  if(pre) copyText(pre.innerText, 'Dokumentasi API');
+}
+
+// Theme
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
   document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
@@ -394,8 +555,7 @@ async function doPlayQris() {
   const customQr = document.getElementById('playCustomQr').value.trim();
   const box = document.getElementById('playResult');
   box.style.display = 'block';
-  box.innerHTML = '<p>Sedang membuat QRIS...</p>';
-
+  
   let url = `${BASE_URL}/api/create?amount=${amt}&note=${encodeURIComponent(note)}`;
   if(mode === 'custom' && customQr) {
     url += `&static_qr=${encodeURIComponent(customQr)}`;
@@ -408,17 +568,17 @@ async function doPlayQris() {
     const json = await res.json();
     if(json.success) {
       const d = json.data;
-      box.innerHTML = `
-        <img src="${d.qr_image}" alt="QRIS"/>
-        <h2 style="color:var(--green);font-size:1.6rem;margin-bottom:4px">Rp ${d.total_amount.toLocaleString('id-ID')}</h2>
-        <p style="color:var(--muted);font-size:12px">Nominal Dasar: Rp ${d.base_amount.toLocaleString('id-ID')} + Kode Unik Rp ${d.unique_code}</p>
-        <p style="margin-top:8px">Check ID: <code style="color:var(--sky)">${d.check_id}</code></p>
-      `;
+      document.getElementById('playImg').src = d.qr_image;
+      document.getElementById('playTotal').innerText = `Rp ${d.total_amount.toLocaleString('id-ID')}`;
+      document.getElementById('playDetail').innerText = `Nominal Dasar: Rp ${d.base_amount.toLocaleString('id-ID')} + Kode Unik: Rp ${d.unique_code}`;
+      document.getElementById('playCheckId').innerText = d.check_id;
+      document.getElementById('playQrString').innerText = d.qr_string || '';
+      document.getElementById('playQrUrl').innerText = `${BASE_URL}${d.qr_image}`;
     } else {
-      box.innerHTML = `<p style="color:var(--red)"><b>Gagal:</b> ${json.message}</p>`;
+      box.innerHTML = `<p style="color:var(--red);padding:14px"><b>Gagal:</b> ${json.message}</p>`;
     }
   } catch(e) {
-    box.innerHTML = `<p style="color:var(--red)">Gagal terhubung: ${e.message}</p>`;
+    box.innerHTML = `<p style="color:var(--red);padding:14px">Gagal terhubung: ${e.message}</p>`;
   }
 }
 
@@ -450,7 +610,7 @@ async function reqOtp() {
         uniqueid: json._uniqueid,
         phone: phone
       };
-      alert('Kode OTP berhasil dikirim ke nomor HP Anda!');
+      showToast('Kode OTP berhasil dikirim via SMS!');
       document.getElementById('stepOtp').style.display = 'block';
     } else {
       alert('Gagal: ' + (json.errors?.[0]?.message || json.message || 'Periksa nomor HP Anda.'));
@@ -459,7 +619,7 @@ async function reqOtp() {
     alert('Koneksi gagal: ' + e.message);
   } finally {
     btn.disabled = false;
-    btn.innerText = 'Kirim Kode OTP (SMS)';
+    btn.innerText = '📲 Kirim Kode OTP (SMS)';
   }
 }
 
@@ -505,7 +665,7 @@ async function verOtp() {
       
       document.getElementById('mutToken').value = accessToken;
       document.getElementById('mutMerchant').value = merchantId;
-      alert('Verifikasi Berhasil! Session Anda sudah aktif.');
+      showToast('Verifikasi Berhasil! Token tersimpan.');
     } else {
       alert('Verifikasi gagal: ' + (json.errors?.[0]?.message || json.message || 'OTP tidak valid'));
     }
@@ -518,37 +678,47 @@ async function verOtp() {
 }
 
 function resetOtp() {
-  document.getElementById('stepOtp').style.display = 'none';
   document.getElementById('sessOtp').value = '';
+  document.getElementById('stepOtp').style.display = 'none';
+  document.getElementById('sessResult').style.display = 'none';
 }
 
-// 3. Cek Mutasi
+// 3. Mutasi
 async function doGetMutasi() {
   const token = document.getElementById('mutToken').value.trim();
-  const merch = document.getElementById('mutMerchant').value.trim();
+  const merchantId = document.getElementById('mutMerchant').value.trim();
+  if(!token || !merchantId) return alert('Access Token dan Merchant ID wajib diisi!');
+
   const wrap = document.getElementById('mutTableWrap');
   const tbody = document.getElementById('mutBody');
-
-  if(!token || !merch) return alert('Silakan isi Access Token dan Merchant ID!');
-  tbody.innerHTML = '<tr><td colspan="4">Mengambil mutasi...</td></tr>';
   wrap.style.display = 'block';
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Mengambil data mutasi GoPay...</td></tr>';
 
   try {
-    const res = await fetch(`${BASE_URL}/gomerch/api/mutasi`, {
+    const res = await fetch(`${BASE_URL}/gomerch/api/transactions`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ access_token: token, merchant_id: merch })
+      body: JSON.stringify({
+        access_token: token,
+        merchant_id: merchantId,
+        page: 1,
+        limit: 10
+      })
     });
     const json = await res.json();
     if(json.success && json.data && json.data.transactions) {
       tbody.innerHTML = '';
+      if(json.data.transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center">Belum ada mutasi transaksi masuk.</td></tr>';
+        return;
+      }
       json.data.transactions.forEach(t => {
         tbody.innerHTML += `
           <tr>
-            <td><code>${t.order_id || '-'}</code></td>
-            <td>${t.transaction_time || '-'}</td>
-            <td style="color:var(--green);font-weight:700">Rp ${(t.gross_amount || 0).toLocaleString('id-ID')}</td>
-            <td><span style="color:var(--green)">${t.transaction_status || 'SETTLEMENT'}</span></td>
+            <td><code>${t.order_id || t.id || '-'}</code></td>
+            <td>${t.created_at || t.time || '-'}</td>
+            <td><b>Rp ${Number(t.amount).toLocaleString('id-ID')}</b></td>
+            <td><span class="tag-active">${t.status || 'SUCCESS'}</span></td>
           </tr>
         `;
       });
@@ -572,14 +742,15 @@ const data = await res.json();
 console.log("QR Image:", data.data.qr_image);
 console.log("Total Bayar:", data.data.total_amount);
 
-// Polling Cek Status Setiap 2 Detik
-setInterval(async () => {
-  const check = await fetch(BASE + "/api/check/" + data.data.check_id);
-  const status = await check.json();
-  if (status.status === "PAID") {
-    console.log("LUNAS!");
+// Polling Cek Status Pembayaran
+const checkId = data.data.check_id;
+const timer = setInterval(async () => {
+  const chk = await (await fetch(BASE + "/api/check/" + checkId)).json();
+  if (chk.data && chk.data.status === "PAID") {
+    console.log("Pembayaran Berhasil Lunas!");
+    clearInterval(timer);
   }
-}, 2000);`,
+}, 5000);`,
   py: `# Integrasi Python (requests)
 import requests, time
 
@@ -590,9 +761,9 @@ check_id = r["data"]["check_id"]
 print("Total Bayar:", r["data"]["total_amount"])
 
 while True:
-    time.sleep(2)
-    cek = requests.get(f"{BASE}/api/check/{check_id}").json()
-    if cek.get("status") == "PAID":
+    time.sleep(5)
+    chk = requests.get(f"{BASE}/api/check/{check_id}").json()
+    if chk.get("data", {}).get("status") == "PAID":
         print("LUNAS!")
         break`,
   php: `<?php
@@ -610,19 +781,19 @@ echo "Total Bayar: Rp " . number_format($data['data']['total_amount']);
 ?>`
 };
 
-function tabSnippet(lang) {
+let activeTab = 'js';
+function tabSnippet(tab) {
+  activeTab = tab;
   document.querySelectorAll('.snippet-tab').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-  document.getElementById('codeSnippetBody').innerText = SNIPPETS[lang];
+  document.getElementById('codeSnippetBody').innerText = SNIPPETS[tab];
 }
-
 function copySnippetCode() {
-  const txt = document.getElementById('codeSnippetBody').innerText;
-  navigator.clipboard.writeText(txt);
-  alert('Kode integrasi berhasil disalin!');
+  copyText(SNIPPETS[activeTab], 'Kode Integrasi');
 }
 
-document.getElementById('codeSnippetBody').innerText = SNIPPETS.js;
+// Inisialisasi awal snippet
+document.getElementById('codeSnippetBody').innerText = SNIPPETS['js'];
 </script>
 </body>
 </html>

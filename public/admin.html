@@ -100,6 +100,24 @@ tr:hover td{background:var(--panel)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;max-width:540px;width:90%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+
+/* Toast Notification */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(4,21,40,.96);border:1.5px solid var(--green);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:all .25s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+@media(max-width:768px){
+  .topbar{padding:10px 14px;height:auto;min-height:56px;flex-wrap:wrap;gap:8px}
+  .brand-title{font-size:14px}
+  .top-actions{gap:6px}
+  .btn-nav{padding:6px 10px;font-size:11.5px}
+  .container{padding:20px 12px}
+  .auth-wrap{padding:24px 16px;margin:30px auto 0}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat-card{padding:14px}
+  .stat-val{font-size:20px}
+  .panel{padding:16px 14px;border-radius:14px}
+  table{min-width:620px}
+}
 </style>
 </head>
 <body>
@@ -367,7 +385,7 @@ function renderDashboard(clients) {
         </td>
         <td>
           <span class="key-code">${c.apiKey}</span>
-          <button class="btn-copy" onclick="navigator.clipboard.writeText('${c.apiKey}');alert('API Key disalin!')">Salin</button>
+          <button class="btn-copy" onclick="navigator.clipboard.writeText('${c.apiKey}');showToast('API Key disalin!')">Salin</button>
         </td>
         <td><span class="badge ${badgeClass}">${badgeText}</span></td>
         <td>${timeLabel}</td>
@@ -463,15 +481,29 @@ async function deleteClient(key) {
   } catch(e){ alert(e.message); }
 }
 
+function showToast(text) {
+  const t = document.getElementById('toastAdmin');
+  if(!t) return;
+  t.innerText = '📋 ' + text;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    t.classList.remove('show');
+  }, 2200);
+}
+
 function copyWelcomeText() {
   const txt = document.getElementById('clientWelcomeText').value;
   navigator.clipboard.writeText(txt);
-  alert('Teks berhasil disalin! Tinggal Anda kirimkan ke klien via Telegram / WhatsApp.');
+  showToast('Teks berhasil disalin! Tinggal kirim ke klien.');
 }
 
 function closeModal() {
   document.getElementById('successModal').classList.remove('open');
 }
 </script>
+
+<!-- FLOATING TOAST -->
+<div id="toastAdmin" class="toast">📋 Berhasil disalin!</div>
 </body>
 </html>
