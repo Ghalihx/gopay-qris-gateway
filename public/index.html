@@ -74,6 +74,7 @@ code{font-family:var(--mono);word-break:break-all}
 .callout{padding:14px 18px;border-radius:12px;font-size:13px;margin-bottom:20px;border-left:4px solid transparent;line-height:1.6}
 .cl-info{background:var(--blue-dim);border-left-color:var(--blue);color:var(--body)}
 .cl-green{background:var(--green-dim);border-left-color:var(--green);color:var(--body)}
+.cl-amber{background:var(--amber-dim);border-left-color:var(--amber);color:var(--body)}
 
 .try-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:24px}
 .field-wrap{margin-bottom:16px}
@@ -86,6 +87,8 @@ code{font-family:var(--mono);word-break:break-all}
 .btn-primary{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;box-shadow:0 4px 14px var(--blue-glow)}
 .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
 .btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
+.btn-amber{background:linear-gradient(135deg,var(--amber),#d97706);color:#fff}
+.btn-red{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff}
 .btn-ghost{background:var(--panel);color:var(--dim);border:1.5px solid var(--line2)}
 .btn-row{display:flex;gap:10px}
 
@@ -104,6 +107,9 @@ code{font-family:var(--mono);word-break:break-all}
 table{width:100%;border-collapse:collapse}
 th, td{padding:10px 12px;border-bottom:1px solid var(--line);font-size:12px;text-align:left}
 th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase}
+
+.tag-active{background:var(--green-dim);color:var(--green);padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px}
+.tag-suspend{background:var(--red-dim);color:var(--red);padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px}
 
 .footer{margin-top:60px;padding:32px 24px;background:var(--surface);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
 
@@ -134,9 +140,11 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
       <div class="nav-grp-label">Integrasi Developer</div>
       <a href="#docs" class="nav-a">Dokumentasi REST API</a>
       <a href="#snippets" class="nav-a">Contoh Kode Integrasi</a>
+      <div class="nav-grp-label">Admin Owner</div>
+      <a href="#admin" class="nav-a" style="color:var(--amber)">👑 Kelola Klien (SaaS)</a>
     </nav>
     <div style="padding:16px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line)">
-      Version: <strong style="color:var(--dim)">v1.0.0</strong><br/>
+      Version: <strong style="color:var(--dim)">v2.0 (SaaS Ready)</strong><br/>
       Status: <strong style="color:var(--green)">Online (HTTPS)</strong>
     </div>
   </aside>
@@ -144,7 +152,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
   <!-- MAIN CONTENT -->
   <div class="main">
     <div class="topbar">
-      <div class="t-bread">gateway / api / v1.0</div>
+      <div class="t-bread">gateway / api / v2.0</div>
       <div class="t-online"><div class="t-pulse"></div><span>API Ready</span></div>
       <button class="t-theme" onclick="toggleTheme()">Tema</button>
     </div>
@@ -160,7 +168,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
           <div class="hero-meta-row">
             <div class="meta-chip"><strong>Base URL:</strong>&nbsp;<code id="displayBaseUrl" style="color:var(--sky)"></code></div>
             <div class="meta-chip"><strong>Standard:</strong>&nbsp;<code>EMVCo / Bank Indonesia</code></div>
-            <div class="meta-chip"><strong>Mode:</strong>&nbsp;<code>Production Ready</code></div>
+            <div class="meta-chip"><strong>Auth:</strong>&nbsp;<code>API Key Protected</code></div>
           </div>
         </div>
 
@@ -175,12 +183,12 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
             <div class="ic-desc">Menyisipkan 3 digit kode acak unik (100 - 300) agar verifikasi pembayaran dapat dicocokkan otomatis antar pembeli.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">👥 Multi-Merchant Ready</div>
-            <div class="ic-desc">Klien dapat mengirimkan string static QR toko mereka sendiri saat membuat tagihan, atau menggunakan QR default toko yang terpasang di server.</div>
+            <div class="ic-title">🔑 Sistem Langganan API Key</div>
+            <div class="ic-desc">Setiap klien/pembeli layanan memiliki API Key dengan masa aktif otomatis (misal 30 hari). Bisa diperpanjang atau dinonaktifkan kapan saja.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">⚡ Fast Polling & Relay</div>
-            <div class="ic-desc">Endpoint cek status instan setiap 2 detik yang siap diintegrasikan ke bot Telegram, bot WhatsApp, dan website toko online.</div>
+            <div class="ic-title">👥 Multi-Merchant Ready</div>
+            <div class="ic-desc">Klien dapat mengirimkan string static QR toko mereka sendiri saat membuat tagihan, atau menggunakan QR default yang terpasang di server.</div>
           </div>
         </div>
       </section>
@@ -193,6 +201,11 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         </div>
 
         <div class="try-card">
+          <div class="field-wrap">
+            <label class="field-label">API Key Klien</label>
+            <input type="text" id="playApiKey" class="field-input" value="ghx_demo_tester_key_2026"/>
+            <small style="color:var(--muted);font-size:11px">Gunakan demo key di atas untuk pengujian, atau masukkan API Key resmi langganan Anda.</small>
+          </div>
           <div class="field-wrap">
             <label class="field-label">Target QR Merchant</label>
             <select id="qrTargetMode" class="field-input" onchange="toggleQrTarget()">
@@ -307,17 +320,18 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         <div class="sec-title">📖 Dokumentasi REST API & Integrasi Developer</div>
         
         <div class="try-card">
-          <h3 style="color:var(--head);font-size:15px;margin-bottom:8px">1. Generate Dynamic QRIS</h3>
-          <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Endpoint untuk membuat transaksi baru:</p>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)"><span class="doc-base"></span>/api/create?amount=10000</pre>
+          <h3 style="color:var(--head);font-size:15px;margin-bottom:8px">1. Generate Dynamic QRIS (Wajib Header API Key)</h3>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Sertakan header <code>x-api-key: YOUR_KEY</code>:</p>
+          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
+  -H "x-api-key: YOUR_API_KEY"</pre>
           <p style="color:var(--muted);font-size:12px;margin-top:6px">Opsional parameter: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code> (jika klien ingin uang masuk ke rekening QR toko mereka sendiri).</p>
 
           <h3 style="color:var(--head);font-size:15px;margin-top:20px;margin-bottom:8px">2. Cek Status Pembayaran (Polling)</h3>
           <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Endpoint untuk mengecek apakah pembeli sudah melunasi:</p>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)"><span class="doc-base"></span>/api/check/:check_id</pre>
+          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">GET <span class="doc-base"></span>/api/check/:check_id</pre>
 
           <h3 style="color:var(--head);font-size:15px;margin-top:20px;margin-bottom:8px">3. URL Gambar QR Langsung (PNG)</h3>
-          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)"><span class="doc-base"></span>/api/qr/:check_id.png</pre>
+          <pre style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky)">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
         </div>
       </section>
 
@@ -338,6 +352,68 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         </div>
       </section>
 
+      <!-- 7. ADMIN PORTAL (MONETISASI SAAS) -->
+      <section id="admin" class="section">
+        <div class="sec-title" style="color:var(--amber)">👑 Portal Pemilik: Kelola Klien & Langganan API Key</div>
+        <div class="callout cl-amber">
+          Gunakan portal ini untuk membuat kunci API baru bagi pembeli, memperpanjang masa aktif langganan bulanan, atau memblokir akses klien.
+        </div>
+
+        <div class="try-card">
+          <div id="adminLoginBox">
+            <div class="field-wrap">
+              <label class="field-label">Password Admin Secret</label>
+              <input type="password" id="adminSecretInput" class="field-input" placeholder="Masukkan password ADMIN_SECRET"/>
+              <small style="color:var(--muted);font-size:11px">Default: <code>ghalih123</code> (bisa diubah di file .env VPS Anda)</small>
+            </div>
+            <button class="btn btn-amber" onclick="loginAdmin()">Masuk ke Panel Admin</button>
+          </div>
+
+          <div id="adminPanelBox" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <h3 style="color:var(--head)">Daftar Klien Berlangganan</h3>
+              <button class="btn btn-ghost" style="width:auto;padding:6px 12px;font-size:12px" onclick="logoutAdmin()">Logout</button>
+            </div>
+
+            <!-- Form Buat Kunci Baru -->
+            <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:20px">
+              <h4 style="color:var(--sky);margin-bottom:12px">➕ Buat API Key Baru untuk Pembeli</h4>
+              <div class="field-wrap">
+                <label class="field-label">Nama Klien / Toko</label>
+                <input type="text" id="newClientName" class="field-input" placeholder="Contoh: Toko VPN Rian / Bot Topup Game"/>
+              </div>
+              <div class="field-wrap">
+                <label class="field-label">Durasi Masa Aktif</label>
+                <select id="newClientDays" class="field-input">
+                  <option value="30">30 Hari (1 Bulan Langganan)</option>
+                  <option value="60">60 Hari (2 Bulan)</option>
+                  <option value="90">90 Hari (3 Bulan)</option>
+                  <option value="365">365 Hari (1 Tahun)</option>
+                </select>
+              </div>
+              <button class="btn btn-green" onclick="createClientKey()">Generate & Terbitkan API Key</button>
+            </div>
+
+            <!-- Tabel Klien -->
+            <div class="tbl-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nama Klien</th>
+                    <th>API Key (Kunci)</th>
+                    <th>Status</th>
+                    <th>Masa Aktif Berakhir</th>
+                    <th>Trx</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="adminKeysBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
 
     <!-- FOOTER -->
@@ -354,6 +430,11 @@ document.getElementById('displayBaseUrl').innerText = BASE_URL;
 document.querySelectorAll('.doc-base').forEach(el => el.innerText = BASE_URL);
 
 window._gomerch_sess = {};
+let currentAdminSecret = localStorage.getItem('ghx_admin_secret') || '';
+
+if(currentAdminSecret) {
+  document.getElementById('adminSecretInput').value = currentAdminSecret;
+}
 
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
@@ -367,6 +448,7 @@ function toggleQrTarget() {
 
 // 1. Playground Generate QRIS
 async function doPlayQris() {
+  const apiKey = document.getElementById('playApiKey').value.trim();
   const amt = document.getElementById('playAmount').value;
   const note = document.getElementById('playNote').value;
   const mode = document.getElementById('qrTargetMode').value;
@@ -381,7 +463,9 @@ async function doPlayQris() {
   }
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      headers: { 'x-api-key': apiKey }
+    });
     const json = await res.json();
     if(json.success) {
       const d = json.data;
@@ -392,7 +476,7 @@ async function doPlayQris() {
         <p style="margin-top:8px">Check ID: <code style="color:var(--sky)">${d.check_id}</code></p>
       `;
     } else {
-      box.innerHTML = `<p style="color:var(--red)">Error: ${json.message}</p>`;
+      box.innerHTML = `<p style="color:var(--red)"><b>Gagal:</b> ${json.message}</p>`;
     }
   } catch(e) {
     box.innerHTML = `<p style="color:var(--red)">Gagal terhubung: ${e.message}</p>`;
@@ -405,13 +489,9 @@ async function reqOtp() {
   if(!rawPhone) return alert('Silakan masukkan nomor HP!');
 
   let phone = rawPhone;
-  if(phone.startsWith('08')) {
-    phone = '628' + phone.substring(2);
-  } else if(phone.startsWith('+62')) {
-    phone = phone.substring(1);
-  } else if(!phone.startsWith('62')) {
-    phone = '62' + phone;
-  }
+  if(phone.startsWith('08')) phone = '628' + phone.substring(2);
+  else if(phone.startsWith('+62')) phone = phone.substring(1);
+  else if(!phone.startsWith('62')) phone = '62' + phone;
 
   const btn = document.getElementById('btnReqOtp');
   btn.disabled = true;
@@ -476,9 +556,7 @@ async function verOtp() {
           body: JSON.stringify({ access_token: accessToken })
         });
         const meData = await meRes.json();
-        if(meData.success && meData.merchant_id) {
-          merchantId = meData.merchant_id;
-        }
+        if(meData.success && meData.merchant_id) merchantId = meData.merchant_id;
       } catch(meErr){}
 
       document.getElementById('outMerchantId').value = merchantId;
@@ -543,11 +621,131 @@ async function doGetMutasi() {
   }
 }
 
+// 4. Admin Portal Functions (SaaS)
+async function loginAdmin() {
+  const secret = document.getElementById('adminSecretInput').value.trim();
+  if(!secret) return alert('Masukkan password admin!');
+  currentAdminSecret = secret;
+  localStorage.setItem('ghx_admin_secret', secret);
+  await loadAdminKeys();
+}
+
+function logoutAdmin() {
+  currentAdminSecret = '';
+  localStorage.removeItem('ghx_admin_secret');
+  document.getElementById('adminPanelBox').style.display = 'none';
+  document.getElementById('adminLoginBox').style.display = 'block';
+}
+
+async function loadAdminKeys() {
+  try {
+    const res = await fetch(`${BASE_URL}/api/admin/keys`, {
+      headers: { 'x-admin-secret': currentAdminSecret }
+    });
+    const json = await res.json();
+    if(json.success) {
+      document.getElementById('adminLoginBox').style.display = 'none';
+      document.getElementById('adminPanelBox').style.display = 'block';
+      renderAdminTable(json.data);
+    } else {
+      alert('Password Admin Salah!');
+    }
+  } catch(e) {
+    alert('Gagal mengambil data klien: ' + e.message);
+  }
+}
+
+function renderAdminTable(list) {
+  const tbody = document.getElementById('adminKeysBody');
+  tbody.innerHTML = '';
+  if(!list || list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Belum ada klien terdaftar. Buat klien baru di atas.</td></tr>';
+    return;
+  }
+  list.forEach(k => {
+    const isAct = k.status === 'ACTIVE';
+    const expDate = new Date(k.expiresAt).toLocaleDateString('id-ID', { year:'numeric', month:'short', day:'numeric' });
+    tbody.innerHTML += `
+      <tr>
+        <td><b>${k.clientName}</b></td>
+        <td><code>${k.apiKey}</code> <button class="snippet-copy" onclick="navigator.clipboard.writeText('${k.apiKey}');alert('API Key disalin!')">Salin</button></td>
+        <td><span class="${isAct ? 'tag-active' : 'tag-suspend'}">${k.status}</span></td>
+        <td>${expDate}</td>
+        <td>${k.totalTransactions || 0}</td>
+        <td>
+          <button class="btn btn-green" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto;margin-right:4px" onclick="extendKey('${k.apiKey}')">+30 Hari</button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto;margin-right:4px" onclick="toggleKey('${k.apiKey}', '${isAct ? 'SUSPENDED' : 'ACTIVE'}')">${isAct ? 'Suspend' : 'Aktifkan'}</button>
+          <button class="btn btn-red" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto" onclick="deleteKey('${k.apiKey}')">Hapus</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function createClientKey() {
+  const name = document.getElementById('newClientName').value.trim();
+  const days = document.getElementById('newClientDays').value;
+  if(!name) return alert('Masukkan nama klien!');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/admin/keys/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
+      body: JSON.stringify({ client_name: name, duration_days: days })
+    });
+    const json = await res.json();
+    if(json.success) {
+      alert(`Berhasil membuat API Key!\n\nKlien: ${name}\nKey: ${json.data.apiKey}\nAktif: ${days} hari`);
+      document.getElementById('newClientName').value = '';
+      loadAdminKeys();
+    } else {
+      alert(json.message);
+    }
+  } catch(e) { alert('Gagal: ' + e.message); }
+}
+
+async function extendKey(key) {
+  if(!confirm('Perpanjang masa aktif 30 hari lagi?')) return;
+  try {
+    const res = await fetch(`${BASE_URL}/api/admin/keys/extend`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
+      body: JSON.stringify({ api_key: key, additional_days: 30 })
+    });
+    loadAdminKeys();
+  } catch(e){ alert(e.message); }
+}
+
+async function toggleKey(key, status) {
+  try {
+    const res = await fetch(`${BASE_URL}/api/admin/keys/toggle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
+      body: JSON.stringify({ api_key: key, status: status })
+    });
+    loadAdminKeys();
+  } catch(e){ alert(e.message); }
+}
+
+async function deleteKey(key) {
+  if(!confirm('Yakin ingin menghapus API Key ini?')) return;
+  try {
+    const res = await fetch(`${BASE_URL}/api/admin/keys/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
+      body: JSON.stringify({ api_key: key })
+    });
+    loadAdminKeys();
+  } catch(e){ alert(e.message); }
+}
+
 // Snippets
 const SNIPPETS = {
   js: `// Integrasi Node.js (Fetch)
 const BASE = "${BASE_URL}";
-const res = await fetch(BASE + "/api/create?amount=15000");
+const res = await fetch(BASE + "/api/create?amount=15000", {
+  headers: { "x-api-key": "MASUKKAN_API_KEY_ANDA" }
+});
 const data = await res.json();
 
 console.log("QR Image:", data.data.qr_image);
@@ -565,7 +763,8 @@ setInterval(async () => {
 import requests, time
 
 BASE = "${BASE_URL}"
-r = requests.get(f"{BASE}/api/create?amount=15000").json()
+headers = {"x-api-key": "MASUKKAN_API_KEY_ANDA"}
+r = requests.get(f"{BASE}/api/create?amount=15000", headers=headers).json()
 check_id = r["data"]["check_id"]
 print("Total Bayar:", r["data"]["total_amount"])
 
@@ -576,14 +775,17 @@ while True:
         print("LUNAS!")
         break`,
   php: `<?php
-// Integrasi PHP
+// Integrasi PHP (cURL dengan Header API Key)
 $base = "${BASE_URL}";
-$json = file_get_contents($base . "/api/create?amount=15000");
-$data = json_decode($json, true);
-$checkId = $data['data']['check_id'];
-$total = $data['data']['total_amount'];
-
-echo "Total Bayar: Rp " . number_format($total);
+$ch = curl_init($base . "/api/create?amount=15000");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "x-api-key: MASUKKAN_API_KEY_ANDA"
+]);
+$res = curl_exec($ch);
+curl_close($ch);
+$data = json_decode($res, true);
+echo "Total Bayar: Rp " . number_format($data['data']['total_amount']);
 ?>`
 };
 
