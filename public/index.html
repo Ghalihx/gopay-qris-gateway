@@ -140,8 +140,8 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
       <div class="nav-grp-label">Integrasi Developer</div>
       <a href="#docs" class="nav-a">Dokumentasi REST API</a>
       <a href="#snippets" class="nav-a">Contoh Kode Integrasi</a>
-      <div class="nav-grp-label">Admin Owner</div>
-      <a href="#admin" class="nav-a" style="color:var(--amber)">👑 Kelola Klien (SaaS)</a>
+      <div class="nav-grp-label">Portal Pemilik</div>
+      <a href="/admin" class="nav-a" style="color:var(--amber)">👑 Admin Dashboard &rarr;</a>
     </nav>
     <div style="padding:16px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line)">
       Version: <strong style="color:var(--dim)">v2.0 (SaaS Ready)</strong><br/>
@@ -154,6 +154,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
     <div class="topbar">
       <div class="t-bread">gateway / api / v2.0</div>
       <div class="t-online"><div class="t-pulse"></div><span>API Ready</span></div>
+      <a href="/admin" class="t-theme" style="color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:6px">👑 <span>Portal Admin</span></a>
       <button class="t-theme" onclick="toggleTheme()">Tema</button>
     </div>
 
@@ -352,69 +353,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         </div>
       </section>
 
-      <!-- 7. ADMIN PORTAL (MONETISASI SAAS) -->
-      <section id="admin" class="section">
-        <div class="sec-title" style="color:var(--amber)">👑 Portal Pemilik: Kelola Klien & Langganan API Key</div>
-        <div class="callout cl-amber">
-          Gunakan portal ini untuk membuat kunci API baru bagi pembeli, memperpanjang masa aktif langganan bulanan, atau memblokir akses klien.
-        </div>
-
-        <div class="try-card">
-          <div id="adminLoginBox">
-            <div class="field-wrap">
-              <label class="field-label">Password Admin Secret</label>
-              <input type="password" id="adminSecretInput" class="field-input" placeholder="Masukkan password ADMIN_SECRET"/>
-              <small style="color:var(--muted);font-size:11px">Default: <code>ghalih123</code> (bisa diubah di file .env VPS Anda)</small>
-            </div>
-            <button class="btn btn-amber" onclick="loginAdmin()">Masuk ke Panel Admin</button>
-          </div>
-
-          <div id="adminPanelBox" style="display:none">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-              <h3 style="color:var(--head)">Daftar Klien Berlangganan</h3>
-              <button class="btn btn-ghost" style="width:auto;padding:6px 12px;font-size:12px" onclick="logoutAdmin()">Logout</button>
-            </div>
-
-            <!-- Form Buat Kunci Baru -->
-            <div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:20px">
-              <h4 style="color:var(--sky);margin-bottom:12px">➕ Buat API Key Baru untuk Pembeli</h4>
-              <div class="field-wrap">
-                <label class="field-label">Nama Klien / Toko</label>
-                <input type="text" id="newClientName" class="field-input" placeholder="Contoh: Toko VPN Rian / Bot Topup Game"/>
-              </div>
-              <div class="field-wrap">
-                <label class="field-label">Durasi Masa Aktif</label>
-                <select id="newClientDays" class="field-input">
-                  <option value="30">30 Hari (1 Bulan Langganan)</option>
-                  <option value="60">60 Hari (2 Bulan)</option>
-                  <option value="90">90 Hari (3 Bulan)</option>
-                  <option value="365">365 Hari (1 Tahun)</option>
-                </select>
-              </div>
-              <button class="btn btn-green" onclick="createClientKey()">Generate & Terbitkan API Key</button>
-            </div>
-
-            <!-- Tabel Klien -->
-            <div class="tbl-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nama Klien</th>
-                    <th>API Key (Kunci)</th>
-                    <th>Status</th>
-                    <th>Masa Aktif Berakhir</th>
-                    <th>Trx</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="adminKeysBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
+      </div>
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -619,124 +558,6 @@ async function doGetMutasi() {
   } catch(e) {
     tbody.innerHTML = `<tr><td colspan="4" style="color:var(--red)">Gagal: ${e.message}</td></tr>`;
   }
-}
-
-// 4. Admin Portal Functions (SaaS)
-async function loginAdmin() {
-  const secret = document.getElementById('adminSecretInput').value.trim();
-  if(!secret) return alert('Masukkan password admin!');
-  currentAdminSecret = secret;
-  localStorage.setItem('ghx_admin_secret', secret);
-  await loadAdminKeys();
-}
-
-function logoutAdmin() {
-  currentAdminSecret = '';
-  localStorage.removeItem('ghx_admin_secret');
-  document.getElementById('adminPanelBox').style.display = 'none';
-  document.getElementById('adminLoginBox').style.display = 'block';
-}
-
-async function loadAdminKeys() {
-  try {
-    const res = await fetch(`${BASE_URL}/api/admin/keys`, {
-      headers: { 'x-admin-secret': currentAdminSecret }
-    });
-    const json = await res.json();
-    if(json.success) {
-      document.getElementById('adminLoginBox').style.display = 'none';
-      document.getElementById('adminPanelBox').style.display = 'block';
-      renderAdminTable(json.data);
-    } else {
-      alert('Password Admin Salah!');
-    }
-  } catch(e) {
-    alert('Gagal mengambil data klien: ' + e.message);
-  }
-}
-
-function renderAdminTable(list) {
-  const tbody = document.getElementById('adminKeysBody');
-  tbody.innerHTML = '';
-  if(!list || list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">Belum ada klien terdaftar. Buat klien baru di atas.</td></tr>';
-    return;
-  }
-  list.forEach(k => {
-    const isAct = k.status === 'ACTIVE';
-    const expDate = new Date(k.expiresAt).toLocaleDateString('id-ID', { year:'numeric', month:'short', day:'numeric' });
-    tbody.innerHTML += `
-      <tr>
-        <td><b>${k.clientName}</b></td>
-        <td><code>${k.apiKey}</code> <button class="snippet-copy" onclick="navigator.clipboard.writeText('${k.apiKey}');alert('API Key disalin!')">Salin</button></td>
-        <td><span class="${isAct ? 'tag-active' : 'tag-suspend'}">${k.status}</span></td>
-        <td>${expDate}</td>
-        <td>${k.totalTransactions || 0}</td>
-        <td>
-          <button class="btn btn-green" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto;margin-right:4px" onclick="extendKey('${k.apiKey}')">+30 Hari</button>
-          <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto;margin-right:4px" onclick="toggleKey('${k.apiKey}', '${isAct ? 'SUSPENDED' : 'ACTIVE'}')">${isAct ? 'Suspend' : 'Aktifkan'}</button>
-          <button class="btn btn-red" style="padding:4px 8px;font-size:11px;display:inline-block;width:auto" onclick="deleteKey('${k.apiKey}')">Hapus</button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-async function createClientKey() {
-  const name = document.getElementById('newClientName').value.trim();
-  const days = document.getElementById('newClientDays').value;
-  if(!name) return alert('Masukkan nama klien!');
-
-  try {
-    const res = await fetch(`${BASE_URL}/api/admin/keys/create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
-      body: JSON.stringify({ client_name: name, duration_days: days })
-    });
-    const json = await res.json();
-    if(json.success) {
-      alert(`Berhasil membuat API Key!\n\nKlien: ${name}\nKey: ${json.data.apiKey}\nAktif: ${days} hari`);
-      document.getElementById('newClientName').value = '';
-      loadAdminKeys();
-    } else {
-      alert(json.message);
-    }
-  } catch(e) { alert('Gagal: ' + e.message); }
-}
-
-async function extendKey(key) {
-  if(!confirm('Perpanjang masa aktif 30 hari lagi?')) return;
-  try {
-    const res = await fetch(`${BASE_URL}/api/admin/keys/extend`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
-      body: JSON.stringify({ api_key: key, additional_days: 30 })
-    });
-    loadAdminKeys();
-  } catch(e){ alert(e.message); }
-}
-
-async function toggleKey(key, status) {
-  try {
-    const res = await fetch(`${BASE_URL}/api/admin/keys/toggle`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
-      body: JSON.stringify({ api_key: key, status: status })
-    });
-    loadAdminKeys();
-  } catch(e){ alert(e.message); }
-}
-
-async function deleteKey(key) {
-  if(!confirm('Yakin ingin menghapus API Key ini?')) return;
-  try {
-    const res = await fetch(`${BASE_URL}/api/admin/keys/delete`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentAdminSecret },
-      body: JSON.stringify({ api_key: key })
-    });
-    loadAdminKeys();
-  } catch(e){ alert(e.message); }
 }
 
 // Snippets

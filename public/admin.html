@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Admin Dashboard — QRIS SaaS Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#020d1a;--surface:#041528;--panel:#071e36;--raised:#0a2644;
+  --line:#0f3358;--line2:#164270;--muted:#4a89b8;--dim:#7bbde8;
+  --body:#a5d5f8;--head:#ffffff;
+  --blue:#1a73e8;--blue-dim:rgba(26,115,232,.15);--blue-glow:rgba(26,115,232,.35);
+  --sky:#38bdf8;--sky-dim:rgba(56,189,248,.15);
+  --green:#10b981;--green-dim:rgba(16,185,129,.15);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.15);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.15);
+  --mono:'IBM Plex Mono',monospace;--sans:'Outfit',sans-serif;
+}
+[data-theme="light"]{
+  --ink:#e8f4fd;--surface:#ffffff;--panel:#eef7fe;--raised:#d6ecfb;
+  --line:#b3d9f5;--line2:#7bbde8;--muted:#4a89b8;--dim:#1a5a8a;
+  --body:#0d3b6e;--head:#041e3a;
+  --blue:#1a73e8;--blue-dim:rgba(26,115,232,.12);--blue-glow:rgba(26,115,232,.28);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--ink);color:var(--body);font-size:14px;line-height:1.6;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--sans);cursor:pointer;border:none;outline:none}
+input,textarea,select{font-family:var(--mono)}
+code{font-family:var(--mono);word-break:break-all}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:10px}
+
+/* Topbar */
+.topbar{height:64px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--amber),#d97706);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;box-shadow:0 4px 12px rgba(245,158,11,.35)}
+.brand-title{font-size:16px;font-weight:800;color:var(--head);letter-spacing:-.02em}
+.top-actions{display:flex;align-items:center;gap:12px}
+.btn-nav{background:var(--panel);border:1px solid var(--line2);color:var(--dim);padding:8px 14px;border-radius:8px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-nav:hover{border-color:var(--sky);color:var(--head)}
+
+/* Layout */
+.container{max-width:1120px;margin:0 auto;padding:36px 24px}
+
+/* Auth Card */
+.auth-wrap{max-width:440px;margin:60px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:36px;box-shadow:0 20px 40px rgba(0,0,0,.25);text-align:center}
+.auth-icon{width:64px;height:64px;border-radius:16px;background:var(--amber-dim);border:1px solid rgba(245,158,11,.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px}
+.auth-title{font-size:20px;font-weight:800;color:var(--head);margin-bottom:8px}
+.auth-desc{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* Form inputs */
+.field-wrap{margin-bottom:18px;text-align:left}
+.field-label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.field-input{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;color:var(--head);font-size:13px;outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--amber)}
+
+/* Buttons */
+.btn{width:100%;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn-amber{background:linear-gradient(135deg,var(--amber),#d97706);color:#fff}
+.btn-amber:hover{filter:brightness(1.1);box-shadow:0 4px 16px rgba(245,158,11,.4)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{filter:brightness(1.1)}
+.btn-ghost{background:var(--panel);border:1px solid var(--line2);color:var(--dim)}
+.btn-ghost:hover{border-color:var(--sky);color:var(--head)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{filter:brightness(1.1)}
+
+/* Dashboard Grid */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.stat-label{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stat-val{font-size:26px;font-weight:800;color:var(--head);margin-top:6px;font-family:var(--mono)}
+
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:28px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.panel-title{font-size:16px;font-weight:800;color:var(--head);display:flex;align-items:center;gap:8px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:12px 14px;background:var(--panel);color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)}
+td{padding:14px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:middle}
+tr:hover td{background:var(--panel)}
+
+/* Badges */
+.badge{padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;text-transform:uppercase;display:inline-block}
+.badge-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.badge-suspended{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.badge-expired{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+
+.key-code{background:var(--panel);border:1px solid var(--line);padding:4px 8px;border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--sky)}
+.btn-copy{padding:3px 8px;border-radius:5px;font-size:11px;background:var(--line2);color:var(--dim);margin-left:6px;cursor:pointer}
+.btn-copy:hover{color:var(--head);background:var(--blue)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;max-width:540px;width:90%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">⚡</div>
+    <div>
+      <div class="brand-title">SaaS Admin Portal</div>
+      <div style="font-size:11px;color:var(--muted)">QRIS Multi-Client Gateway</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <a href="/" class="btn-nav">🌐 Halaman Utama API</a>
+    <button class="btn-nav" id="themeBtn" onclick="toggleTheme()">☀️ Mode Terang</button>
+    <button class="btn-nav" id="logoutBtn" style="display:none;color:var(--red);border-color:rgba(239,68,68,.3)" onclick="doLogout()">🚪 Logout</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="authScreen" class="auth-wrap">
+    <div class="auth-icon">🔐</div>
+    <h1 class="auth-title">Akses Khusus Pemilik</h1>
+    <p class="auth-desc">Masukkan Password Admin Secret untuk mengelola langganan klien & API Key.</p>
+
+    <div class="field-wrap">
+      <label class="field-label">Password Admin (ADMIN_SECRET)</label>
+      <input type="password" id="adminSecretInput" class="field-input" placeholder="Masukkan password admin..." onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn btn-amber" onclick="doLogin()">Masuk ke Dashboard</button>
+    <div id="authError" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
+  </div>
+
+  <!-- 2. DASHBOARD SCREEN -->
+  <div id="dashScreen" style="display:none">
+    
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Klien Terdaftar</div>
+        <div class="stat-val" id="statTotalClients">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Klien Aktif</div>
+        <div class="stat-val" id="statActiveClients" style="color:var(--green)">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Transaksi Gateway</div>
+        <div class="stat-val" id="statTotalTrx" style="color:var(--sky)">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Status Server</div>
+        <div class="stat-val" style="color:var(--green);font-size:20px;display:flex;align-items:center;gap:8px">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green)"></span> ONLINE
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL BUAT KLIEN BARU -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">➕ Terbitkan API Key Baru untuk Klien Pembeli</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px">
+        <div class="field-wrap" style="margin-bottom:0">
+          <label class="field-label">Nama Klien / Pembeli</label>
+          <input type="text" id="newClientName" class="field-input" placeholder="Contoh: Toko VPN Rian / Bot Topup Reza"/>
+        </div>
+        <div class="field-wrap" style="margin-bottom:0">
+          <label class="field-label">Durasi Paket Langganan</label>
+          <select id="newClientDays" class="field-input">
+            <option value="7">7 Hari (Paket Trial / Percobaan)</option>
+            <option value="30" selected>30 Hari (1 Bulan Standar)</option>
+            <option value="60">60 Hari (2 Bulan)</option>
+            <option value="90">90 Hari (3 Bulan)</option>
+            <option value="365">365 Hari (1 Tahun Penuh)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label">Custom QRIS Statis (Opsional)</label>
+        <input type="text" id="newClientQr" class="field-input" placeholder="Kosongkan jika ingin memakai QRIS GoPay utama server Anda"/>
+        <small style="color:var(--muted);font-size:11px">Jika klien ingin uang pembayaran langsung masuk ke rekening GoPay miliknya sendiri, tempel QRIS statis string dia di sini.</small>
+      </div>
+
+      <button class="btn btn-amber" style="width:auto;padding:10px 24px" onclick="createClient()">⚡ Buat Kunci API & Terbitkan</button>
+    </div>
+
+    <!-- PANEL DAFTAR KLIEN -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">👥 Daftar Klien & Manajemen Akses</div>
+        <button class="btn btn-ghost" style="width:auto;padding:6px 14px;font-size:12px" onclick="fetchClients()">🔄 Refresh Data</button>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nama Klien</th>
+              <th>API Key (Kunci Klien)</th>
+              <th>Status</th>
+              <th>Sisa Hari / Masa Berlaku</th>
+              <th>Total Trx</th>
+              <th style="text-align:right">Aksi Manajemen</th>
+            </tr>
+          </thead>
+          <tbody id="clientsTableBody">
+            <tr>
+              <td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Memuat data klien...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- MODAL POPUP SETELAH BUAT KLIEN BARU -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div style="font-size:32px;margin-bottom:12px">🎉</div>
+    <h3 style="font-size:18px;font-weight:800;color:var(--head);margin-bottom:8px">API Key Berhasil Diterbitkan!</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Salin detail di bawah ini dan kirimkan langsung ke klien/pembeli Anda:</p>
+
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px">
+      <textarea id="clientWelcomeText" readonly style="width:100%;height:140px;background:transparent;border:none;color:var(--head);font-size:12px;resize:none;outline:none"></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-green" onclick="copyWelcomeText()">📋 Salin Pesan untuk Klien</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentSecret = localStorage.getItem('ghx_admin_secret') || '';
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const nxt = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nxt);
+  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (currentSecret) {
+    validateAndLoad();
+  }
+});
+
+async function doLogin() {
+  const secret = document.getElementById('adminSecretInput').value.trim();
+  if(!secret) return alert('Silakan masukkan password admin!');
+  currentSecret = secret;
+  await validateAndLoad();
+}
+
+function doLogout() {
+  currentSecret = '';
+  localStorage.removeItem('ghx_admin_secret');
+  document.getElementById('dashScreen').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'block';
+  document.getElementById('logoutBtn').style.display = 'none';
+  document.getElementById('adminSecretInput').value = '';
+}
+
+async function validateAndLoad() {
+  const errBox = document.getElementById('authError');
+  errBox.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/admin/keys', {
+      headers: { 'x-admin-secret': currentSecret }
+    });
+    const json = await res.json();
+    if(res.ok && json.success) {
+      localStorage.setItem('ghx_admin_secret', currentSecret);
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('dashScreen').style.display = 'block';
+      document.getElementById('logoutBtn').style.display = 'inline-flex';
+      renderDashboard(json.data);
+    } else {
+      errBox.innerText = json.message || 'Password Admin tidak valid!';
+      errBox.style.display = 'block';
+      localStorage.removeItem('ghx_admin_secret');
+    }
+  } catch(e) {
+    errBox.innerText = 'Gagal terhubung ke server: ' + e.message;
+    errBox.style.display = 'block';
+  }
+}
+
+async function fetchClients() {
+  try {
+    const res = await fetch('/api/admin/keys', {
+      headers: { 'x-admin-secret': currentSecret }
+    });
+    const json = await res.json();
+    if(json.success) renderDashboard(json.data);
+  } catch(e) {
+    alert('Gagal mengambil data: ' + e.message);
+  }
+}
+
+function renderDashboard(clients) {
+  // Update stats
+  let totalTrx = 0;
+  let activeCount = 0;
+  const now = Date.now();
+
+  clients.forEach(c => {
+    totalTrx += (c.totalTransactions || 0);
+    const exp = new Date(c.expiresAt).getTime();
+    if (c.status === 'ACTIVE' && exp > now) activeCount++;
+  });
+
+  document.getElementById('statTotalClients').innerText = clients.length;
+  document.getElementById('statActiveClients').innerText = activeCount;
+  document.getElementById('statTotalTrx').innerText = totalTrx;
+
+  // Render Table
+  const tbody = document.getElementById('clientsTableBody');
+  tbody.innerHTML = '';
+
+  if (clients.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Belum ada klien terdaftar. Silakan terbitkan di panel atas.</td></tr>';
+    return;
+  }
+
+  clients.forEach(c => {
+    const expTime = new Date(c.expiresAt).getTime();
+    const isExpired = now > expTime;
+    let badgeClass = 'badge-active';
+    let badgeText = 'ACTIVE';
+
+    if (c.status !== 'ACTIVE') {
+      badgeClass = 'badge-suspended';
+      badgeText = 'SUSPENDED';
+    } else if (isExpired) {
+      badgeClass = 'badge-expired';
+      badgeText = 'EXPIRED';
+    }
+
+    const remainingDays = Math.ceil((expTime - now) / (1000 * 60 * 60 * 24));
+    let timeLabel = '';
+    if (isExpired) {
+      timeLabel = `<span style="color:var(--red);font-weight:700">Habis (${Math.abs(remainingDays)} hari lalu)</span>`;
+    } else {
+      timeLabel = `<span style="color:var(--green);font-weight:700">${remainingDays} hari tersisa</span><br><small style="color:var(--muted)">s/d ${new Date(c.expiresAt).toLocaleDateString('id-ID')}</small>`;
+    }
+
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <b style="color:var(--head);font-size:14px">${c.clientName}</b>
+          ${c.customStaticQr ? '<br><small style="color:var(--sky)">Custom QRIS</small>' : ''}
+        </td>
+        <td>
+          <span class="key-code">${c.apiKey}</span>
+          <button class="btn-copy" onclick="navigator.clipboard.writeText('${c.apiKey}');alert('API Key disalin!')">Salin</button>
+        </td>
+        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+        <td>${timeLabel}</td>
+        <td><b>${c.totalTransactions || 0}</b></td>
+        <td style="text-align:right">
+          <div style="display:inline-flex;gap:6px">
+            <button class="btn btn-green" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="extendClient('${c.apiKey}')">+30 Hari</button>
+            <button class="btn btn-ghost" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="toggleClient('${c.apiKey}', '${c.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE'}')">
+              ${c.status === 'ACTIVE' ? 'Suspend' : 'Aktifkan'}
+            </button>
+            <button class="btn btn-red" style="padding:5px 10px;font-size:11.5px;width:auto" onclick="deleteClient('${c.apiKey}')">Hapus</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function createClient() {
+  const name = document.getElementById('newClientName').value.trim();
+  const days = document.getElementById('newClientDays').value;
+  const qr = document.getElementById('newClientQr').value.trim();
+
+  if(!name) return alert('Silakan masukkan Nama Klien / Pembeli!');
+
+  try {
+    const res = await fetch('/api/admin/keys/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-secret': currentSecret
+      },
+      body: JSON.stringify({
+        client_name: name,
+        duration_days: days,
+        custom_static_qr: qr || null
+      })
+    });
+    const json = await res.json();
+    if(json.success) {
+      document.getElementById('newClientName').value = '';
+      document.getElementById('newClientQr').value = '';
+      fetchClients();
+
+      // Show welcome text for client
+      const template = `Halo kak ${name},\nBerikut akses API Payment Gateway QRIS Anda:\n\n• API Key: ${json.data.apiKey}\n• Masa Aktif: ${days} Hari\n• Dokumentasi API: https://qris.ghxlih.biz.id\n• Endpoint Create: https://qris.ghxlih.biz.id/api/create?amount=15000\n• Header: x-api-key: ${json.data.apiKey}\n\nTerima kasih sudah berlangganan! Hubungi @GallVpnStore jika ada kendala.`;
+      
+      document.getElementById('clientWelcomeText').value = template;
+      document.getElementById('successModal').classList.add('open');
+    } else {
+      alert(json.message);
+    }
+  } catch(e) {
+    alert('Gagal membuat klien: ' + e.message);
+  }
+}
+
+async function extendClient(key) {
+  if(!confirm('Perpanjang masa aktif klien ini sebesar 30 hari lagi?')) return;
+  try {
+    const res = await fetch('/api/admin/keys/extend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentSecret },
+      body: JSON.stringify({ api_key: key, additional_days: 30 })
+    });
+    const json = await res.json();
+    if(json.success) fetchClients();
+  } catch(e){ alert(e.message); }
+}
+
+async function toggleClient(key, status) {
+  try {
+    const res = await fetch('/api/admin/keys/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentSecret },
+      body: JSON.stringify({ api_key: key, status: status })
+    });
+    const json = await res.json();
+    if(json.success) fetchClients();
+  } catch(e){ alert(e.message); }
+}
+
+async function deleteClient(key) {
+  if(!confirm('Yakin ingin MENGHAPUS klien ini secara permanen?')) return;
+  try {
+    const res = await fetch('/api/admin/keys/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': currentSecret },
+      body: JSON.stringify({ api_key: key })
+    });
+    const json = await res.json();
+    if(json.success) fetchClients();
+  } catch(e){ alert(e.message); }
+}
+
+function copyWelcomeText() {
+  const txt = document.getElementById('clientWelcomeText').value;
+  navigator.clipboard.writeText(txt);
+  alert('Teks berhasil disalin! Tinggal Anda kirimkan ke klien via Telegram / WhatsApp.');
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('open');
+}
+</script>
+</body>
+</html>
