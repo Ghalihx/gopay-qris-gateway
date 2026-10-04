@@ -6,7 +6,6 @@
 <title>QRIS Payment Gateway — API & Dokumentasi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
 :root{
   --ink:#020d1a;--surface:#041528;--panel:#071e36;--raised:#0a2644;
@@ -95,7 +94,6 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 .field-input, .field-textarea{width:100%;background:var(--panel);border:1.5px solid var(--line2);color:var(--head);padding:11px 13px;border-radius:9px;outline:none;font-size:13px;transition:all .2s;box-sizing:border-box}
 .field-input:focus, .field-textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--blue-dim)}
 .field-textarea{resize:vertical;min-height:70px}
-.field-file{width:100%;background:var(--panel);border:1.5px dashed var(--line2);color:var(--muted);padding:10px 12px;border-radius:9px;font-size:12px;cursor:pointer}
 
 /* Minimalist Icon Copy Button */
 .btn-copy-icon{background:transparent;color:var(--muted);border:1px solid var(--line2);border-radius:6px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;flex-shrink:0}
@@ -122,9 +120,6 @@ pre{max-width:100%;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywh
 .snippet-tab{padding:5px 11px;font-size:11px;font-weight:700;color:var(--dim);border-radius:6px;cursor:pointer;font-family:var(--mono);background:transparent}
 .snippet-tab.active{background:var(--surface);color:var(--sky)}
 .snippet-body{padding:14px;font-family:var(--mono);font-size:12px;line-height:1.7;color:#7bbde8;overflow-x:auto;white-space:pre;max-width:100%}
-
-.qr-box-result{display:none;margin-top:20px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
-.qr-box-result img{max-width:200px;width:100%;height:auto;background:#fff;padding:8px;border-radius:10px;margin-bottom:12px}
 
 .tbl-wrap{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;min-width:440px}
@@ -173,12 +168,11 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
     <nav class="nav">
       <div class="nav-grp-label">Navigasi</div>
       <a href="#overview" class="nav-a active" onclick="closeSidebar()">Overview</a>
-      <a href="#generator" class="nav-a" onclick="closeSidebar()">Generator QRIS</a>
-      <a href="#session" class="nav-a" onclick="closeSidebar()">Session GoMerch</a>
-      <a href="#mutasi" class="nav-a" onclick="closeSidebar()">Mutasi Transaksi</a>
-      <div class="nav-grp-label">Integrasi Developer</div>
       <a href="#docs" class="nav-a" onclick="closeSidebar()">Dokumentasi REST API</a>
       <a href="#snippets" class="nav-a" onclick="closeSidebar()">Contoh Kode Integrasi</a>
+      <div class="nav-grp-label">Merchant Tools</div>
+      <a href="#session" class="nav-a" onclick="closeSidebar()">Session GoMerch</a>
+      <a href="#mutasi" class="nav-a" onclick="closeSidebar()">Mutasi Transaksi</a>
       <div class="nav-grp-label">Akses Pemilik</div>
       <a href="/admin" class="nav-a" style="color:var(--amber)">Dashboard Admin &rarr;</a>
     </nav>
@@ -209,7 +203,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
             Integrasi pembayaran otomatis GoPay QRIS 24/7 dengan kode unik dynamic nominal, validasi instan, dan proteksi langganan API Key.
           </p>
           <div class="hero-meta-row">
-            <div class="meta-chip">Standard: <strong>EMVCo BI</strong></div>
+            <div class="meta-chip">Standard: <strong>EMVCo ASPI</strong></div>
             <div class="meta-chip">Proxy: <strong>Universal GoMerch</strong></div>
             <div class="meta-chip">Domain: <strong id="displayBaseUrl">Loading...</strong></div>
           </div>
@@ -225,8 +219,8 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
             <div class="ic-desc">Setiap klien wajib menggunakan API Key aktif terdaftar untuk memanggil endpoint pembuatan transaksi pembayaran.</div>
           </div>
           <div class="info-card">
-            <div class="ic-title">Custom QRIS Input</div>
-            <div class="ic-desc">Mendukung upload gambar QRIS statis atau input string QRIS langsung dari perangkat pengguna.</div>
+            <div class="ic-title">Full Dynamic Integration</div>
+            <div class="ic-desc">Mendukung pembuatan QRIS langsung via REST API untuk Bot Telegram, Web Topup, Olshop, dan aplikasi kustom.</div>
           </div>
           <div class="info-card">
             <div class="ic-title">Telegram Support</div>
@@ -235,84 +229,60 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         </div>
       </section>
 
-      <!-- 2. GENERATOR PLAYGROUND -->
-      <section id="generator" class="section">
-        <div class="sec-title">Generator QRIS Dinamis</div>
-        <div class="callout cl-green">
-          Gunakan API Key aktif milik Anda dan unggah foto QRIS untuk menghasilkan QRIS dinamis dengan kode unik.
-        </div>
-
+      <!-- 2. DOKUMENTASI REST API -->
+      <section id="docs" class="section">
+        <div class="sec-title">Dokumentasi REST API</div>
+        
         <div class="try-card">
-          <div class="field-wrap">
-            <label class="field-label">API Key</label>
-            <div class="input-copy-group">
-              <input type="text" id="playApiKey" class="field-input" placeholder="Masukkan API Key Anda"/>
-              <button type="button" class="btn-copy-icon" onclick="copyFieldValue('playApiKey')" title="Salin">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              </button>
-            </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">1. Create Transaction (Header x-api-key Wajib)</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(1)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
+          <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Panggil endpoint berikut dengan header <code>x-api-key: YOUR_KEY</code>:</p>
+          <pre id="curlDoc1" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
+  -H "x-api-key: YOUR_API_KEY"</pre>
+          <p style="color:var(--muted);font-size:11.5px;margin-top:8px">Parameter query opsional: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code></p>
 
-          <div class="field-wrap">
-            <label class="field-label">Upload Foto QRIS</label>
-            <input type="file" id="qrFileInput" accept="image/*" class="field-file" onchange="handleQrUpload(event)"/>
-            <small style="color:var(--muted);font-size:11px;margin-top:4px;display:block" id="qrFileStatus">Pilih file gambar screenshot atau foto QRIS dari galeri perangkat.</small>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">2. Check Status (Polling Pembayaran)</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(2)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
+          <pre id="curlDoc2" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/check/:check_id</pre>
 
-          <div class="field-wrap">
-            <label class="field-label">String QRIS Statis</label>
-            <input type="text" id="playStaticQr" class="field-input" placeholder="Terisi otomatis setelah upload foto, atau masukkan manual"/>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
+            <h3 style="color:var(--head);font-size:14px">3. Direct Image QR (PNG)</h3>
+            <button type="button" class="btn-copy-icon" onclick="copyCurl(3)" title="Salin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
-
-          <div class="field-wrap">
-            <label class="field-label">Nominal Pembayaran (Rp)</label>
-            <input type="number" id="playAmount" class="field-input" value="10000" min="500" step="500"/>
-          </div>
-
-          <div class="field-wrap">
-            <label class="field-label">Catatan Transaksi</label>
-            <input type="text" id="playNote" class="field-input" placeholder="Contoh: Order Paket"/>
-          </div>
-
-          <button class="btn btn-primary" onclick="doPlayQris()">Generate QRIS</button>
-
-          <div class="qr-box-result" id="playResult">
-            <img id="playImg" src="" alt="QRIS Code"/>
-            <h2 id="playTotal" style="color:var(--green);font-size:1.6rem;margin-bottom:4px"></h2>
-            <p style="color:var(--muted);font-size:12px;margin-bottom:12px" id="playDetail"></p>
-
-            <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:left;margin-top:12px">
-              <div class="field-label-row">
-                <span class="field-label">Check ID</span>
-                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playCheckId').innerText)" title="Salin">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <code id="playCheckId" style="color:var(--sky);font-size:12px;display:block;margin-bottom:12px"></code>
-
-              <div class="field-label-row">
-                <span class="field-label">String QRIS</span>
-                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playQrString').innerText)" title="Salin">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <div style="background:var(--panel);padding:8px;border-radius:6px;max-height:60px;overflow-y:auto;margin-bottom:12px">
-                <code id="playQrString" style="color:var(--dim);font-size:11px"></code>
-              </div>
-
-              <div class="field-label-row">
-                <span class="field-label">URL Gambar QR</span>
-                <button type="button" class="btn-copy-icon" onclick="copyText(document.getElementById('playQrUrl').innerText)" title="Salin">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-              </div>
-              <code id="playQrUrl" style="color:var(--amber);font-size:11px;display:block"></code>
-            </div>
-          </div>
+          <pre id="curlDoc3" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
         </div>
       </section>
 
-      <!-- 3. SESSION GOMERCH -->
+      <!-- 3. CONTOH KODE INTEGRASI -->
+      <section id="snippets" class="section">
+        <div class="sec-title">Contoh Kode Integrasi</div>
+        
+        <div class="snippet-wrap">
+          <div class="snippet-head">
+            <div class="snippet-tabs">
+              <button class="snippet-tab active" onclick="tabSnippet('js')">Node.js</button>
+              <button class="snippet-tab" onclick="tabSnippet('py')">Python</button>
+              <button class="snippet-tab" onclick="tabSnippet('php')">PHP</button>
+            </div>
+            <button type="button" class="btn-copy-icon" onclick="copySnippetCode()" title="Salin Kode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+          <div class="snippet-body" id="codeSnippetBody"></div>
+        </div>
+      </section>
+
+      <!-- 4. SESSION GOMERCH -->
       <section id="session" class="section">
         <div class="sec-title">Session GoMerch</div>
         <div class="callout cl-info">
@@ -380,7 +350,7 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
         </div>
       </section>
 
-      <!-- 4. CEK MUTASI REAL-TIME -->
+      <!-- 5. CEK MUTASI REAL-TIME -->
       <section id="mutasi" class="section">
         <div class="sec-title">Mutasi Transaksi GoPay</div>
         <div class="callout cl-info">
@@ -422,59 +392,6 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
               <tbody id="mutBody"></tbody>
             </table>
           </div>
-        </div>
-      </section>
-
-      <!-- 5. DOKUMENTASI REST API -->
-      <section id="docs" class="section">
-        <div class="sec-title">Dokumentasi REST API</div>
-        
-        <div class="try-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <h3 style="color:var(--head);font-size:14px">1. Create Transaction (Header x-api-key Wajib)</h3>
-            <button type="button" class="btn-copy-icon" onclick="copyCurl(1)" title="Salin">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-          </div>
-          <p style="color:var(--muted);font-size:12.5px;margin-bottom:8px">Sertakan header <code>x-api-key: YOUR_KEY</code>:</p>
-          <pre id="curlDoc1" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">curl -X GET "<span class="doc-base"></span>/api/create?amount=10000" \
-  -H "x-api-key: YOUR_API_KEY"</pre>
-          <p style="color:var(--muted);font-size:11.5px;margin-top:8px">Parameter opsional: <code>&note=NamaBarang</code> dan <code>&static_qr=000201...</code></p>
-
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
-            <h3 style="color:var(--head);font-size:14px">2. Check Status</h3>
-            <button type="button" class="btn-copy-icon" onclick="copyCurl(2)" title="Salin">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-          </div>
-          <pre id="curlDoc2" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/check/:check_id</pre>
-
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:8px">
-            <h3 style="color:var(--head);font-size:14px">3. Direct Image QR (PNG)</h3>
-            <button type="button" class="btn-copy-icon" onclick="copyCurl(3)" title="Salin">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-          </div>
-          <pre id="curlDoc3" style="background:#010d1f;padding:12px;border-radius:8px;color:var(--sky);font-size:12px">GET <span class="doc-base"></span>/api/qr/:check_id.png</pre>
-        </div>
-      </section>
-
-      <!-- 6. CONTOH KODE INTEGRASI -->
-      <section id="snippets" class="section">
-        <div class="sec-title">Contoh Kode Integrasi</div>
-        
-        <div class="snippet-wrap">
-          <div class="snippet-head">
-            <div class="snippet-tabs">
-              <button class="snippet-tab active" onclick="tabSnippet('js')">Node.js</button>
-              <button class="snippet-tab" onclick="tabSnippet('py')">Python</button>
-              <button class="snippet-tab" onclick="tabSnippet('php')">PHP</button>
-            </div>
-            <button type="button" class="btn-copy-icon" onclick="copySnippetCode()" title="Salin Kode">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-          </div>
-          <div class="snippet-body" id="codeSnippetBody"></div>
         </div>
       </section>
 
@@ -545,96 +462,13 @@ function copyCurl(num) {
   if(pre) copyText(pre.innerText);
 }
 
-// Client-Side Image QR Decoder (jsQR)
-function handleQrUpload(e) {
-  const file = e.target.files[0];
-  const statusEl = document.getElementById('qrFileStatus');
-  if (!file) return;
-
-  statusEl.innerText = 'Membaca gambar QRIS...';
-  statusEl.style.color = 'var(--sky)';
-
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-
-      try {
-        const imgData = ctx.getImageData(0, 0, img.width, img.height);
-        const code = jsQR(imgData.data, imgData.width, imgData.height);
-        if (code && code.data) {
-          document.getElementById('playStaticQr').value = code.data;
-          statusEl.innerText = 'Foto QRIS berhasil terbaca.';
-          statusEl.style.color = 'var(--green)';
-          showToast('QRIS berhasil terbaca dari foto');
-        } else {
-          statusEl.innerText = 'Gagal membaca kode QR. Pastikan foto jelas atau tempel string manual.';
-          statusEl.style.color = 'var(--red)';
-        }
-      } catch(err) {
-        statusEl.innerText = 'Error parsing: ' + err.message;
-        statusEl.style.color = 'var(--red)';
-      }
-    };
-    img.src = evt.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
 // Theme
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
   document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
 }
 
-// 1. Playground Generate QRIS
-async function doPlayQris() {
-  const apiKey = document.getElementById('playApiKey').value.trim();
-  const amt = document.getElementById('playAmount').value;
-  const note = document.getElementById('playNote').value;
-  const staticQr = document.getElementById('playStaticQr').value.trim();
-  const box = document.getElementById('playResult');
-
-  if(!apiKey) {
-    alert('Masukkan API Key Anda. Silakan hubungi admin @GallVpnStore untuk mendapatkan API Key.');
-    return;
-  }
-  if(!staticQr) {
-    alert('Silakan unggah foto QRIS Anda atau masukkan string QRIS statis terlebih dahulu.');
-    return;
-  }
-
-  box.style.display = 'block';
-  
-  let url = `${BASE_URL}/api/create?amount=${amt}&note=${encodeURIComponent(note)}&static_qr=${encodeURIComponent(staticQr)}`;
-
-  try {
-    const res = await fetch(url, {
-      headers: { 'x-api-key': apiKey }
-    });
-    const json = await res.json();
-    if(json.success) {
-      const d = json.data;
-      document.getElementById('playImg').src = d.qr_image;
-      document.getElementById('playTotal').innerText = `Rp ${d.total_amount.toLocaleString('id-ID')}`;
-      document.getElementById('playDetail').innerText = `Nominal Dasar: Rp ${d.base_amount.toLocaleString('id-ID')} + Kode Unik: Rp ${d.unique_code}`;
-      document.getElementById('playCheckId').innerText = d.check_id;
-      document.getElementById('playQrString').innerText = d.qr_string || '';
-      document.getElementById('playQrUrl').innerText = `${BASE_URL}${d.qr_image}`;
-    } else {
-      box.innerHTML = `<p style="color:var(--red);padding:14px"><b>Gagal:</b> ${json.message}</p>`;
-    }
-  } catch(e) {
-    box.innerHTML = `<p style="color:var(--red);padding:14px">Gagal terhubung: ${e.message}</p>`;
-  }
-}
-
-// 2. Session GoMerch (OTP)
+// 1. Session GoMerch (OTP)
 async function reqOtp() {
   let rawPhone = document.getElementById('sessPhone').value.trim();
   if(!rawPhone) return alert('Silakan masukkan nomor HP!');
@@ -735,7 +569,7 @@ function resetOtp() {
   document.getElementById('sessResult').style.display = 'none';
 }
 
-// 3. Mutasi
+// 2. Mutasi
 async function doGetMutasi() {
   const token = document.getElementById('mutToken').value.trim();
   const merchantId = document.getElementById('mutMerchant').value.trim();
