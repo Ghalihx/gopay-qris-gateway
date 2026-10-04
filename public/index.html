@@ -232,7 +232,26 @@ th{background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:
       <!-- 2. DOKUMENTASI REST API -->
       <section id="docs" class="section">
         <div class="sec-title">Dokumentasi REST API</div>
-        
+
+        <!-- Alur Integrasi 3 Langkah -->
+        <div class="try-card" style="margin-bottom:20px">
+          <div style="font-weight:800;color:var(--head);font-size:14px;margin-bottom:12px">Alur Cara Kerja Integrasi:</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+            <div style="background:var(--panel);padding:14px;border-radius:10px;border:1px solid var(--line)">
+              <div style="color:var(--sky);font-weight:800;font-size:12px;margin-bottom:4px">1. Generate Tagihan</div>
+              <p style="font-size:12px;color:var(--muted);line-height:1.5">Aplikasi atau bot Anda memanggil endpoint <code>/api/create</code> dengan nominal bayar dan header API Key.</p>
+            </div>
+            <div style="background:var(--panel);padding:14px;border-radius:10px;border:1px solid var(--line)">
+              <div style="color:var(--sky);font-weight:800;font-size:12px;margin-bottom:4px">2. Tampilkan QRIS</div>
+              <p style="font-size:12px;color:var(--muted);line-height:1.5">Kirimkan gambar QRIS dinamis dan total nominal yang sudah ada kode uniknya ke pembeli.</p>
+            </div>
+            <div style="background:var(--panel);padding:14px;border-radius:10px;border:1px solid var(--line)">
+              <div style="color:var(--green);font-weight:800;font-size:12px;margin-bottom:4px">3. Konfirmasi Lunas</div>
+              <p style="font-size:12px;color:var(--muted);line-height:1.5">Sistem memeriksa status ke <code>/api/check/:check_id</code> setiap beberapa detik hingga berstatus <code>PAID</code>.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="try-card">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <h3 style="color:var(--head);font-size:14px">1. Create Transaction (Header x-api-key Wajib)</h3>
